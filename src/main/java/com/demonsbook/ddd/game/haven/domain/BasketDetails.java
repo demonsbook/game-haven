@@ -4,9 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class BasketDetails {
-	private Set<ProductId> products = new HashSet<>();
+	private Set<Product> products = new HashSet<>();
 
-	public Set<ProductId> getProducts() {
+	public Set<Product> getProducts() {
 		return products;
 	}
 }

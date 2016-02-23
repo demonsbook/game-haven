@@ -21,12 +21,16 @@ public abstract class EntityId {
 	}
 
 	@Override
-	public final boolean equals(Object o) {
-		if (this == o) return true;
+	public final boolean equals(Object other) {
+		if (this == other) {
+			return true;
+		}
 
-		if (o == null || getClass() != o.getClass()) return false;
+		if (other == null || getClass() != other.getClass()) {
+			return false;
+		}
 
-		EntityId entityId = (EntityId) o;
+		EntityId entityId = (EntityId) other;
 
 		return new EqualsBuilder()
 				.append(uuid, entityId.uuid)

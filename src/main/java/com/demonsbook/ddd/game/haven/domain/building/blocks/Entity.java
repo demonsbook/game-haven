@@ -15,12 +15,16 @@ public abstract class Entity<T extends EntityId> {
 	}
 
 	@Override
-	public final boolean equals(Object o) {
-		if (this == o) return true;
+	public final boolean equals(Object other) {
+		if (this == other) {
+			return true;
+		}
 
-		if (o == null || !(o instanceof Entity) ) return false;
+		if (other == null || !(other instanceof Entity) ) {
+			return false;
+		}
 
-		Entity<?> entity = (Entity<?>) o;
+		Entity<?> entity = (Entity<?>) other;
 
 		return new EqualsBuilder()
 				.append(id, entity.id)
