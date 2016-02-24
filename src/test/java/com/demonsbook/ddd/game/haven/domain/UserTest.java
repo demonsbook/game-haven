@@ -35,4 +35,14 @@ public class UserTest {
 		assertThat(basketDetails.getProducts()).isEmpty();
 	}
 
+	@Test
+	public void shouldAddProductsToTheBasker() {
+		Product product = new Product();
+		user.addToBasket(product);
+
+		BasketDetails basketDetails = user.getBasketDetails();
+
+		assertThat(basketDetails.getProducts()).containsOnly(product);
+	}
+
 }

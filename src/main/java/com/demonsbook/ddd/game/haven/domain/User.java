@@ -8,7 +8,7 @@ import java.util.List;
 public class User extends Entity<UserId> {
 
 	List<GameId> library = new ArrayList<>();
-	private BasketDetails basketDetails = new BasketDetails();
+	private Basket basket = new Basket();
 
 	public User() {
 		super(new UserId());
@@ -23,6 +23,10 @@ public class User extends Entity<UserId> {
 	}
 
 	public BasketDetails getBasketDetails() {
-		return basketDetails;
+		return basket.getDetails();
+	}
+
+	public void addToBasket(Product product) {
+		basket.add(product);
 	}
 }

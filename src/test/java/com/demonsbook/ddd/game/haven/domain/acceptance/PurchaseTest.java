@@ -18,7 +18,7 @@ public class PurchaseTest {
 	private UserId userId;
 	private GameRepository gameRepository = new InMemoryGameRepository();
 	private UserRepository userRepository = new InMemoryUserRepository();
-	private PurchaseService purchaseService = new PurchaseService();
+	private PurchaseService purchaseService = new PurchaseService(userRepository, gameRepository);
 
 	@Test
 	public void shouldBeAbleToBuyAProduct() {
@@ -26,7 +26,7 @@ public class PurchaseTest {
 		givenANewUser();
 
 		Product product = purchaseService.getProduct(gameId, userId);
-//		purchaseService.addToUsersBasket(userId, product.productId());
+		purchaseService.addToUsersBasket(userId, product);
 //		OfferDetails offerDetails = purchaseService.generateOfferFor(userId);
 //		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
 //		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
@@ -37,10 +37,12 @@ public class PurchaseTest {
 	private void givenANewUser() {
 		User user = new User();
 		userRepository.save(user);
+		userId = user.id();
 	}
 
 	private void givenAGameInTheCatalog() {
 		Game game =  new Game();
 		gameRepository.save(game);
+		gameId = game.id();
 	}
 }
