@@ -1,6 +1,8 @@
-package com.demonsbook.ddd.game.haven.domain;
+package com.demonsbook.ddd.game.haven.domain.entity;
 
 import com.demonsbook.ddd.game.haven.domain.building.blocks.Entity;
+import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
+import com.demonsbook.ddd.game.haven.domain.value.object.OfferId;
 
 public class Offer extends Entity<OfferId> {
 

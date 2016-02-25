@@ -1,4 +1,4 @@
-package com.demonsbook.ddd.game.haven.domain;
+package com.demonsbook.ddd.game.haven.domain.entity;
 
 import com.demonsbook.ddd.game.haven.domain.assertions.EntityAssert;
 import com.demonsbook.ddd.game.haven.domain.util.Money;

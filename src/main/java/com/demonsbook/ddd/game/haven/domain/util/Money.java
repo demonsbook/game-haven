@@ -20,12 +20,16 @@ public class Money {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
+	public boolean equals(Object other) {
+		if (this == other) {
+			return true;
+		}
 
-		if (o == null || getClass() != o.getClass()) return false;
+		if (other == null || getClass() != other.getClass()) {
+			return false;
+		}
 
-		Money money = (Money) o;
+		Money money = (Money) other;
 
 		return new EqualsBuilder()
 				.append(amount, money.amount)

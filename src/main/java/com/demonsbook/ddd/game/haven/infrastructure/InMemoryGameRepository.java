@@ -1,11 +1,8 @@
 package com.demonsbook.ddd.game.haven.infrastructure;
 
-import com.demonsbook.ddd.game.haven.domain.Game;
-import com.demonsbook.ddd.game.haven.domain.GameId;
-import com.demonsbook.ddd.game.haven.domain.User;
-import com.demonsbook.ddd.game.haven.domain.UserId;
+import com.demonsbook.ddd.game.haven.domain.entity.Game;
 import com.demonsbook.ddd.game.haven.domain.repository.GameRepository;
-import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
+import com.demonsbook.ddd.game.haven.domain.value.object.GameId;
 
 import java.util.HashMap;
 import java.util.Map;

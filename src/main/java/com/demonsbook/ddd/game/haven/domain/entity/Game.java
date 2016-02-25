@@ -1,7 +1,8 @@
-package com.demonsbook.ddd.game.haven.domain;
+package com.demonsbook.ddd.game.haven.domain.entity;
 
 import com.demonsbook.ddd.game.haven.domain.building.blocks.Entity;
 import com.demonsbook.ddd.game.haven.domain.util.Money;
+import com.demonsbook.ddd.game.haven.domain.value.object.GameId;
 
 import java.util.Currency;
 

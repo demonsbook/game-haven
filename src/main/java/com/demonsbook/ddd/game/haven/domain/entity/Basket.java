@@ -1,7 +1,8 @@
-package com.demonsbook.ddd.game.haven.domain;
+package com.demonsbook.ddd.game.haven.domain.entity;
 
 import com.demonsbook.ddd.game.haven.domain.building.blocks.Entity;
-import com.google.common.collect.ImmutableSet;
+import com.demonsbook.ddd.game.haven.domain.value.object.BasketId;
+import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,6 +1,9 @@
-package com.demonsbook.ddd.game.haven.domain;
+package com.demonsbook.ddd.game.haven.domain.value.object;
 
 import com.demonsbook.ddd.game.haven.domain.assertions.ValueObjectAssert;
+import com.demonsbook.ddd.game.haven.domain.value.object.BasketDetails;
+import com.demonsbook.ddd.game.haven.domain.value.object.Product;
+import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
 import com.google.common.collect.ImmutableSet;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;

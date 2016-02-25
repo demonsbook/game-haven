@@ -1,13 +1,13 @@
 package com.demonsbook.ddd.game.haven.domain.acceptance;
 
-import com.demonsbook.ddd.game.haven.domain.Game;
-import com.demonsbook.ddd.game.haven.domain.GameId;
-import com.demonsbook.ddd.game.haven.domain.OfferDetails;
-import com.demonsbook.ddd.game.haven.domain.OfferFactory;
-import com.demonsbook.ddd.game.haven.domain.Product;
-import com.demonsbook.ddd.game.haven.domain.ProductFactory;
-import com.demonsbook.ddd.game.haven.domain.User;
-import com.demonsbook.ddd.game.haven.domain.UserId;
+import com.demonsbook.ddd.game.haven.domain.entity.Game;
+import com.demonsbook.ddd.game.haven.domain.value.object.GameId;
+import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
+import com.demonsbook.ddd.game.haven.domain.factory.OfferFactory;
+import com.demonsbook.ddd.game.haven.domain.value.object.Product;
+import com.demonsbook.ddd.game.haven.domain.factory.ProductFactory;
+import com.demonsbook.ddd.game.haven.domain.entity.User;
+import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
 import com.demonsbook.ddd.game.haven.application.services.PurchaseService;
 import com.demonsbook.ddd.game.haven.domain.repository.GameRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;

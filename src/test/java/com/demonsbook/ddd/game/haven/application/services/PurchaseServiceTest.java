@@ -1,14 +1,12 @@
 package com.demonsbook.ddd.game.haven.application.services;
 
 
-import com.demonsbook.ddd.game.haven.domain.Game;
-import com.demonsbook.ddd.game.haven.domain.Offer;
-import com.demonsbook.ddd.game.haven.domain.OfferFactory;
-import com.demonsbook.ddd.game.haven.domain.Product;
-import com.demonsbook.ddd.game.haven.domain.ProductFactory;
-import com.demonsbook.ddd.game.haven.domain.GameId;
-import com.demonsbook.ddd.game.haven.domain.User;
-import com.demonsbook.ddd.game.haven.domain.UserId;
+import com.demonsbook.ddd.game.haven.domain.entity.Game;
+import com.demonsbook.ddd.game.haven.domain.entity.Offer;
+import com.demonsbook.ddd.game.haven.domain.factory.OfferFactory;
+import com.demonsbook.ddd.game.haven.domain.value.object.Product;
+import com.demonsbook.ddd.game.haven.domain.factory.ProductFactory;
+import com.demonsbook.ddd.game.haven.domain.entity.User;
 import com.demonsbook.ddd.game.haven.domain.repository.GameRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
 import org.junit.Test;

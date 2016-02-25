@@ -1,5 +1,7 @@
-package com.demonsbook.ddd.game.haven.domain;
+package com.demonsbook.ddd.game.haven.domain.factory;
 
+import com.demonsbook.ddd.game.haven.domain.entity.Offer;
+import com.demonsbook.ddd.game.haven.domain.entity.User;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 

@@ -1,9 +1,8 @@
-package com.demonsbook.ddd.game.haven.domain;
+package com.demonsbook.ddd.game.haven.domain.value.object;
 
 import com.demonsbook.ddd.game.haven.domain.assertions.EntityIdAssert;
+import com.demonsbook.ddd.game.haven.domain.value.object.BasketId;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class BasketIdTest {
 

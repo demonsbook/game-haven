@@ -1,6 +1,6 @@
 package com.demonsbook.ddd.game.haven.infrastructure;
 
-import com.demonsbook.ddd.game.haven.domain.User;
+import com.demonsbook.ddd.game.haven.domain.entity.User;
 import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;

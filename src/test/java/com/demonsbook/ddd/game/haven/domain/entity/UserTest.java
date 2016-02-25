@@ -1,5 +1,7 @@
-package com.demonsbook.ddd.game.haven.domain;
+package com.demonsbook.ddd.game.haven.domain.entity;
 
+import com.demonsbook.ddd.game.haven.domain.value.object.BasketDetails;
+import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.assertions.EntityAssert;
 import org.junit.Test;
 
