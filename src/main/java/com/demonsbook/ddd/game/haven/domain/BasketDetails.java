@@ -1,16 +1,23 @@
 package com.demonsbook.ddd.game.haven.domain;
 
-import java.util.HashSet;
+import com.google.common.collect.ImmutableSet;
+
 import java.util.Set;
 
-public class BasketDetails {
-	private Set<Product> products = new HashSet<>();
+public final class BasketDetails {
+	private final UserId userId;
+	private final Set<Product> products;
 
-	public BasketDetails(Set<Product> products) {
-		this.products = products;
+	public BasketDetails(Set<Product> products, UserId userId) {
+		this.products = ImmutableSet.copyOf(products);
+		this.userId = userId;
+	}
+
+	public UserId getUserId() {
+		return userId;
 	}
 
 	public Set<Product> getProducts() {
-		return products;
+		return ImmutableSet.copyOf(products);
 	}
 }

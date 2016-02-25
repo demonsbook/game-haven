@@ -1,6 +1,7 @@
 package com.demonsbook.ddd.game.haven.domain;
 
 import com.demonsbook.ddd.game.haven.domain.building.blocks.Entity;
+import com.google.common.collect.ImmutableSet;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +24,7 @@ public class Basket extends Entity<BasketId> {
 		products.add(product);
 	}
 
-	public BasketDetails getDetails() {
-		return new BasketDetails(copyOf(products));
+	public Set<Product> getProducts() {
+		return copyOf(products);
 	}
 }

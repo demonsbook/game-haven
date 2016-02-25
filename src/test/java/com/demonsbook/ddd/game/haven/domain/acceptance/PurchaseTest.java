@@ -2,7 +2,10 @@ package com.demonsbook.ddd.game.haven.domain.acceptance;
 
 import com.demonsbook.ddd.game.haven.domain.Game;
 import com.demonsbook.ddd.game.haven.domain.GameId;
+import com.demonsbook.ddd.game.haven.domain.OfferDetails;
+import com.demonsbook.ddd.game.haven.domain.OfferFactory;
 import com.demonsbook.ddd.game.haven.domain.Product;
+import com.demonsbook.ddd.game.haven.domain.ProductFactory;
 import com.demonsbook.ddd.game.haven.domain.User;
 import com.demonsbook.ddd.game.haven.domain.UserId;
 import com.demonsbook.ddd.game.haven.application.services.PurchaseService;
@@ -16,9 +19,11 @@ public class PurchaseTest {
 
 	private GameId gameId;
 	private UserId userId;
+	private ProductFactory productFactory = new ProductFactory();
+	private OfferFactory offerFactory = new OfferFactory();
 	private GameRepository gameRepository = new InMemoryGameRepository();
 	private UserRepository userRepository = new InMemoryUserRepository();
-	private PurchaseService purchaseService = new PurchaseService(userRepository, gameRepository);
+	private PurchaseService purchaseService = new PurchaseService(productFactory, offerFactory, userRepository, gameRepository);
 
 	@Test
 	public void shouldBeAbleToBuyAProduct() {
@@ -27,7 +32,7 @@ public class PurchaseTest {
 
 		Product product = purchaseService.getProduct(gameId, userId);
 		purchaseService.addToUsersBasket(userId, product);
-//		OfferDetails offerDetails = purchaseService.generateOfferFor(userId);
+		OfferDetails offerDetails = purchaseService.generateOfferFor(userId);
 //		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
 //		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 //

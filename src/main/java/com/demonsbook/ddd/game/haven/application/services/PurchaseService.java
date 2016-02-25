@@ -1,5 +1,7 @@
 package com.demonsbook.ddd.game.haven.application.services;
 
+import com.demonsbook.ddd.game.haven.domain.OfferDetails;
+import com.demonsbook.ddd.game.haven.domain.OfferFactory;
 import com.demonsbook.ddd.game.haven.domain.ProductFactory;
 import com.demonsbook.ddd.game.haven.domain.Game;
 import com.demonsbook.ddd.game.haven.domain.GameId;
@@ -13,11 +15,14 @@ import com.demonsbook.ddd.game.haven.infrastructure.InMemoryUserRepository;
 
 public class PurchaseService {
 
-	private final ProductFactory productFactory = new ProductFactory();
+	private final ProductFactory productFactory;
+	private final OfferFactory offerFactory;
 	private final UserRepository userRepository;
 	private final GameRepository gameRepository;
 
-	public PurchaseService(UserRepository userRepository, GameRepository gameRepository) {
+	public PurchaseService(ProductFactory productFactory, OfferFactory offerFactory, UserRepository userRepository, GameRepository gameRepository) {
+		this.productFactory = productFactory;
+		this.offerFactory = offerFactory;
 		this.userRepository = userRepository;
 		this.gameRepository = gameRepository;
 	}
@@ -31,5 +36,10 @@ public class PurchaseService {
 	public void addToUsersBasket(UserId userId, Product product) {
 		User user = userRepository.getForId(userId);
 		user.addToBasket(product);
+	}
+
+	public OfferDetails generateOfferFor(UserId userId) {
+		User user = userRepository.getForId(userId);
+		return offerFactory.createFor(user).getDetails();
 	}
 }

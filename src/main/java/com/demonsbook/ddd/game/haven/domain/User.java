@@ -23,7 +23,7 @@ public class User extends Entity<UserId> {
 	}
 
 	public BasketDetails getBasketDetails() {
-		return basket.getDetails();
+		return new BasketDetails(basket.getProducts(), id);
 	}
 
 	public void addToBasket(Product product) {
