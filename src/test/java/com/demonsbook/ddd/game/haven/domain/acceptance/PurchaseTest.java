@@ -1,5 +1,6 @@
 package com.demonsbook.ddd.game.haven.domain.acceptance;
 
+import com.demonsbook.ddd.game.haven.config.GameHavenConfig;
 import com.demonsbook.ddd.game.haven.domain.entity.Game;
 import com.demonsbook.ddd.game.haven.domain.value.object.GameId;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
@@ -14,16 +15,21 @@ import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
 import com.demonsbook.ddd.game.haven.infrastructure.InMemoryGameRepository;
 import com.demonsbook.ddd.game.haven.infrastructure.InMemoryUserRepository;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = GameHavenConfig.class)
 public class PurchaseTest {
 
 	private GameId gameId;
 	private UserId userId;
-	private ProductFactory productFactory = new ProductFactory();
-	private OfferFactory offerFactory = new OfferFactory();
-	private GameRepository gameRepository = new InMemoryGameRepository();
-	private UserRepository userRepository = new InMemoryUserRepository();
-	private PurchaseService purchaseService = new PurchaseService(productFactory, offerFactory, userRepository, gameRepository);
+
+	@Autowired private GameRepository gameRepository = new InMemoryGameRepository();
+	@Autowired private UserRepository userRepository = new InMemoryUserRepository();
+	@Autowired private PurchaseService purchaseService = new PurchaseService();
 
 	@Test
 	public void shouldBeAbleToBuyAProduct() {

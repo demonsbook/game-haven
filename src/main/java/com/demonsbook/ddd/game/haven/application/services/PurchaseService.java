@@ -10,20 +10,16 @@ import com.demonsbook.ddd.game.haven.domain.value.object.GameId;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PurchaseService {
 
-	private final ProductFactory productFactory;
-	private final OfferFactory offerFactory;
-	private final UserRepository userRepository;
-	private final GameRepository gameRepository;
-
-	public PurchaseService(ProductFactory productFactory, OfferFactory offerFactory, UserRepository userRepository, GameRepository gameRepository) {
-		this.productFactory = productFactory;
-		this.offerFactory = offerFactory;
-		this.userRepository = userRepository;
-		this.gameRepository = gameRepository;
-	}
+	@Autowired private ProductFactory productFactory;
+	@Autowired private OfferFactory offerFactory;
+	@Autowired private UserRepository userRepository;
+	@Autowired private GameRepository gameRepository;
 
 	public Product getProduct(GameId gameId, UserId userId) {
 		User user = userRepository.getForId(userId);
