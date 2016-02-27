@@ -2,9 +2,12 @@ package com.demonsbook.ddd.game.haven.application.services;
 
 import com.demonsbook.ddd.game.haven.domain.entity.Game;
 import com.demonsbook.ddd.game.haven.domain.entity.Offer;
+import com.demonsbook.ddd.game.haven.domain.entity.Purchase;
+import com.demonsbook.ddd.game.haven.domain.entity.PurchaseId;
 import com.demonsbook.ddd.game.haven.domain.entity.User;
 import com.demonsbook.ddd.game.haven.domain.factory.OfferFactory;
 import com.demonsbook.ddd.game.haven.domain.factory.ProductFactory;
+import com.demonsbook.ddd.game.haven.domain.factory.PurchaseFactory;
 import com.demonsbook.ddd.game.haven.domain.repository.GameRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.OfferRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
@@ -22,9 +25,11 @@ public class PurchaseService {
 
 	@Autowired private ProductFactory productFactory;
 	@Autowired private OfferFactory offerFactory;
+	@Autowired private PurchaseFactory purchaseFactory;
 	@Autowired private UserRepository userRepository;
 	@Autowired private GameRepository gameRepository;
 	@Autowired private OfferRepository offerRepository;
+	@Autowired private PurchaseRepository purchaseRepository;
 
 	public Product getProduct(GameId gameId, UserId userId) {
 		User user = userRepository.getForId(userId);
@@ -46,6 +51,14 @@ public class PurchaseService {
 
 	public PurchaseDetails acceptOffer(OfferId offerId) {
 		Offer offer = offerRepository.getForId(offerId);
-		return offer.accept().getDetails();
+		offer.accept();
+		Purchase purchase = purchaseFactory.createFor(offer);
+		purchaseRepository.save(purchase);
+		return purchase.getDetails();
+	}
+
+	public void confirmPurchase(PurchaseId purchaseId) {
+		Purchase purchase = purchaseRepository.getForId(purchaseId);
+		purchase.confirm();
 	}
 }

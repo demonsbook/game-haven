@@ -39,7 +39,7 @@ public class PurchaseAcceptanceTest {
 		purchaseService.addToUsersBasket(userId, product);
 		OfferDetails offerDetails = purchaseService.generateOfferFor(userId);
 		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
-//		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
+		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 //
 //		assertThat(purchaseService.getGamesOf(userId)).contains(gameId);
 	}

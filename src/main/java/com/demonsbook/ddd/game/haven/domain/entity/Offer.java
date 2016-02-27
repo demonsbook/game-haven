@@ -5,7 +5,13 @@ import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferId;
 import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseDetails;
 
+import static com.demonsbook.ddd.game.haven.domain.entity.Offer.Status.ACCEPTED;
+import static com.demonsbook.ddd.game.haven.domain.entity.Offer.Status.DISCARDED;
+import static com.demonsbook.ddd.game.haven.domain.entity.Offer.Status.NEW;
+
 public class Offer extends Entity<OfferId> {
+
+	private Status status = NEW;
 
 	public Offer() {
 		super(new OfferId());
@@ -19,7 +25,19 @@ public class Offer extends Entity<OfferId> {
 		return new OfferDetails(id);
 	}
 
-	public Purchase accept() {
-		return new Purchase();
+	public void accept() {
+		status = ACCEPTED;
+	}
+
+	public void discard() {
+		status = DISCARDED;
+	}
+
+	public Status status() {
+		return status;
+	}
+
+	public enum Status {
+		NEW, ACCEPTED, DISCARDED
 	}
 }
