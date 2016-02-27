@@ -1,14 +1,14 @@
-package com.demonsbook.ddd.game.haven.infrastructure;
+package com.demonsbook.ddd.game.haven.infrastructure.storage;
 
-import com.demonsbook.ddd.game.haven.application.services.PurchaseRepository;
 import com.demonsbook.ddd.game.haven.domain.entity.Purchase;
 import com.demonsbook.ddd.game.haven.domain.entity.PurchaseId;
-import org.springframework.stereotype.Component;
+import com.demonsbook.ddd.game.haven.domain.repository.PurchaseRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+@Repository
 public class InMemoryPurchaseRepository implements PurchaseRepository {
 
 	private Map<PurchaseId, Purchase> purchases = new HashMap<>();

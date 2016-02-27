@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductFactory {
 
-	public Product createFor(Game game, User user) {
-		return new Product();
+	public Product createFor(User user, Game game) {
+		return new Product(user.id(), game.id());
 	}
 }

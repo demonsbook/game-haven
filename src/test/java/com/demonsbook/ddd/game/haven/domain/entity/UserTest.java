@@ -10,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UserTest {
 
 	private User user = new User();
+	private Game game = new Game();
 
 	@Test
 	public void isAValidEntity() {
@@ -23,9 +24,7 @@ public class UserTest {
 
 	@Test
 	public void shouldAddGamesToHisLibrary() {
-		Game game = new Game();
-
-		user.addGameToLibrary(game);
+		user.addGameToLibrary(game.id());
 
 		assertThat(user.owns(game.id())).isTrue();
 	}
@@ -38,8 +37,8 @@ public class UserTest {
 	}
 
 	@Test
-	public void shouldAddProductsToTheBasker() {
-		Product product = new Product();
+	public void shouldAddProductsToTheBasket() {
+		Product product = new Product(user.id(), game.id());
 		user.addToBasket(product);
 
 		BasketDetails basketDetails = user.getBasketDetails();

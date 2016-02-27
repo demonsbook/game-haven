@@ -11,13 +11,15 @@ import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
-import com.demonsbook.ddd.game.haven.infrastructure.InMemoryGameRepository;
-import com.demonsbook.ddd.game.haven.infrastructure.InMemoryUserRepository;
+import com.demonsbook.ddd.game.haven.infrastructure.storage.InMemoryGameRepository;
+import com.demonsbook.ddd.game.haven.infrastructure.storage.InMemoryUserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = GameHavenConfig.class)
@@ -40,8 +42,8 @@ public class PurchaseAcceptanceTest {
 		OfferDetails offerDetails = purchaseService.generateOfferFor(userId);
 		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
-//
-//		assertThat(purchaseService.getGamesOf(userId)).contains(gameId);
+
+		assertThat(purchaseService.getUserDetails(userId).getGames()).contains(gameId);
 	}
 
 	private void givenANewUser() {

@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class OfferFactory {
 	public Offer createFor(User user) {
-		return new Offer();
+		return new Offer(user.id(), user.getBasketDetails().getProducts());
 	}
 }

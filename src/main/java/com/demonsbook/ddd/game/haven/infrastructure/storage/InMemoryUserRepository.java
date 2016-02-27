@@ -1,14 +1,14 @@
-package com.demonsbook.ddd.game.haven.infrastructure;
+package com.demonsbook.ddd.game.haven.infrastructure.storage;
 
 import com.demonsbook.ddd.game.haven.domain.entity.User;
 import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
+@Repository
 public class InMemoryUserRepository implements UserRepository {
 
 	private Map<UserId, User> users = new HashMap<>();

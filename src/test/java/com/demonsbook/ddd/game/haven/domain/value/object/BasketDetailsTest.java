@@ -1,6 +1,7 @@
 package com.demonsbook.ddd.game.haven.domain.value.object;
 
 import com.demonsbook.ddd.game.haven.domain.assertions.ValueObjectAssert;
+import com.demonsbook.ddd.game.haven.domain.entity.User;
 import com.demonsbook.ddd.game.haven.domain.value.object.BasketDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
@@ -13,7 +14,8 @@ import java.util.Set;
 public class BasketDetailsTest {
 
 	private static final UserId USER_ID = new UserId();
-	private static final Set<Product> PRODUCTS = ImmutableSet.of(new Product());
+	private static final GameId GAME_ID = new GameId();
+	private static final Set<Product> PRODUCTS = ImmutableSet.of(new Product(USER_ID, GAME_ID));
 	private BasketDetails basket = new BasketDetails(PRODUCTS, USER_ID);
 
 	@Test

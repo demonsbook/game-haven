@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class PurchaseFactory {
 	public Purchase createFor(Offer offer) {
-		return new Purchase();
+		return new Purchase(offer);
 	}
 }

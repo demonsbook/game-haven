@@ -1,18 +1,22 @@
 package com.demonsbook.ddd.game.haven.application.services;
 
 
+import com.demonsbook.ddd.game.haven.domain.building.blocks.DomainEventPublisher;
 import com.demonsbook.ddd.game.haven.domain.entity.Game;
 import com.demonsbook.ddd.game.haven.domain.entity.Offer;
 import com.demonsbook.ddd.game.haven.domain.entity.Purchase;
-import com.demonsbook.ddd.game.haven.domain.factory.OfferFactory;
-import com.demonsbook.ddd.game.haven.domain.factory.PurchaseFactory;
-import com.demonsbook.ddd.game.haven.domain.repository.OfferRepository;
-import com.demonsbook.ddd.game.haven.domain.value.object.Product;
-import com.demonsbook.ddd.game.haven.domain.factory.ProductFactory;
 import com.demonsbook.ddd.game.haven.domain.entity.User;
+import com.demonsbook.ddd.game.haven.domain.factory.OfferFactory;
+import com.demonsbook.ddd.game.haven.domain.factory.ProductFactory;
+import com.demonsbook.ddd.game.haven.domain.factory.PurchaseFactory;
 import com.demonsbook.ddd.game.haven.domain.repository.GameRepository;
+import com.demonsbook.ddd.game.haven.domain.repository.OfferRepository;
+import com.demonsbook.ddd.game.haven.domain.repository.PurchaseRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
+import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseDetails;
+import com.demonsbook.ddd.game.haven.domain.value.object.UserDetails;
+import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -27,12 +31,13 @@ import static org.mockito.BDDMockito.then;
 @RunWith(MockitoJUnitRunner.class)
 public class PurchaseServiceTest {
 
-	private final static Product PRODUCT = new Product();
-
-	private Purchase purchase = new Purchase();
-	private Offer offer = new Offer();
 	private User user = new User();
 	private Game game = new Game();
+	private Product product = new Product(user.id(), game.id());
+	private Offer offer = new Offer(user.id(), ImmutableSet.of(product));
+	private Purchase purchase = new Purchase(offer);
+
+	private Product PRODUCT = new Product(user.id(), game.id());
 
 	@Mock private ProductFactory productFactory;
 	@Mock private PurchaseFactory purchaseFactory;
@@ -41,13 +46,14 @@ public class PurchaseServiceTest {
 	@Mock private GameRepository gameRepository;
 	@Mock private OfferRepository offerRepository;
 	@Mock private PurchaseRepository purchaseRepository;
+	@Mock private DomainEventPublisher domainEventPublisher;
 	@InjectMocks private PurchaseService purchaseService;
 
 	@Test
 	public void shouldObtainProductDetailsForGivenGameAndUserCombination() {
 		given(userRepository.getForId(user.id())).willReturn(user);
 		given(gameRepository.getForId(game.id())).willReturn(game);
-		given(productFactory.createFor(game, user)).willReturn(PRODUCT);
+		given(productFactory.createFor(user, game)).willReturn(PRODUCT);
 
 		Product product = purchaseService.getProduct(game.id(), user.id());
 
@@ -100,6 +106,15 @@ public class PurchaseServiceTest {
 		purchaseService.confirmPurchase(purchase.id());
 
 		assertThat(purchase.status()).isSameAs(Purchase.Status.CONFIRMED);
+	}
+
+	@Test
+	public void shouldReturnUserDetails() {
+		given(userRepository.getForId(user.id())).willReturn(user);
+
+		UserDetails userDetails = purchaseService.getUserDetails(user.id());
+
+		assertThat(userDetails).isNotNull();
 	}
 
 }
