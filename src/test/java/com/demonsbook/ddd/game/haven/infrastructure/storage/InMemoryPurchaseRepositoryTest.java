@@ -2,19 +2,18 @@ package com.demonsbook.ddd.game.haven.infrastructure.storage;
 
 import com.demonsbook.ddd.game.haven.domain.entity.Offer;
 import com.demonsbook.ddd.game.haven.domain.entity.Purchase;
-import com.demonsbook.ddd.game.haven.domain.entity.User;
 import com.demonsbook.ddd.game.haven.domain.repository.PurchaseRepository;
-import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
-import java.util.Collections;
-
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_DELIVERY_METHOD_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PAYMENT_METHOD_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_USER_ID;
 import static java.util.Collections.emptySet;
 
 public class InMemoryPurchaseRepositoryTest {
 
-	private Offer offer = new Offer(new UserId(), emptySet());
+	private Offer offer = new Offer(DUMMY_USER_ID, emptySet(), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
 	private PurchaseRepository purchaseRepository = new InMemoryPurchaseRepository();
 
 	@Test

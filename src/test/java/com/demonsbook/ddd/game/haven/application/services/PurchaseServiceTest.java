@@ -14,6 +14,7 @@ import com.demonsbook.ddd.game.haven.domain.repository.GameRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.OfferRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.PurchaseRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
+import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserDetails;
@@ -26,6 +27,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static com.demonsbook.ddd.game.haven.domain.entity.Offer.Status.ACCEPTED;
 import static com.demonsbook.ddd.game.haven.domain.value.object.Product.Version.DIGITAL;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_DELIVERY_METHOD_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PAYMENT_METHOD_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -38,7 +41,7 @@ public class PurchaseServiceTest {
 	private User user = new User();
 	private Game game = new Game();
 	private Product product = new Product(user.id(), game.id(), ANY_VERSION);
-	private Offer offer = new Offer(user.id(), ImmutableSet.of(product));
+	private Offer offer = new Offer(user.id(), ImmutableSet.of(product), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
 	private Purchase purchase = new Purchase(offer);
 
 	@Mock private ProductFactory productFactory;
@@ -74,9 +77,11 @@ public class PurchaseServiceTest {
 	@Test
 	public void shouldGenerateAndStoreAnOfferForUser() {
 		given(userRepository.getForId(user.id())).willReturn(user);
-		given(offerFactory.createFor(user)).willReturn(offer);
+		given(offerFactory.createFor(user.getBasketDetails(), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID)).willReturn(offer);
 
-		assertThat(purchaseService.generateOfferFor(user.id())).isNotNull();
+		OfferDetails offerDetails = purchaseService.generateOfferFor(user.getBasketDetails(), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
+
+		assertThat(offerDetails).isNotNull();
 		then(offerRepository).should().save(offer);
 	}
 

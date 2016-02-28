@@ -2,20 +2,53 @@ package com.demonsbook.ddd.game.haven.domain.factory;
 
 import com.demonsbook.ddd.game.haven.domain.entity.Offer;
 import com.demonsbook.ddd.game.haven.domain.entity.User;
-import org.assertj.core.api.Assertions;
+import com.demonsbook.ddd.game.haven.domain.exception.BasketContentsChangedBeforeOfferCreatedException;
+import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
+import com.demonsbook.ddd.game.haven.domain.value.object.BasketDetails;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_BASKET_DETAILS;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_DELIVERY_METHOD_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PAYMENT_METHOD_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_USER_ID;
+import static java.util.Collections.emptySet;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
+
+@RunWith(MockitoJUnitRunner.class)
 public class OfferFactoryTest {
 
-	private final static User USER = new User();
+	@Mock private User user;
+	@Mock private UserRepository userRepository;
 
-	private OfferFactory offerFactory = new OfferFactory();
+	@InjectMocks private OfferFactory offerFactory;
 
 	@Test
 	public void shouldGenerateOfferForUser() {
-		Offer offer = offerFactory.createFor(USER);
+		given(userRepository.getForId(DUMMY_USER_ID)).willReturn(user);
+		given(user.getBasketDetails()).willReturn(DUMMY_BASKET_DETAILS);
 
-		Assertions.assertThat(offer).isNotNull();
+		Offer offer = offerFactory.createFor(DUMMY_BASKET_DETAILS, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
+
+		assertThat(offer).isNotNull();
+		assertThat(offer.userId()).isSameAs(DUMMY_USER_ID);
+		assertThat(offer.products()).isSameAs(DUMMY_BASKET_DETAILS.getProducts());
+		assertThat(offer.deliveryMethodId()).isSameAs(DUMMY_DELIVERY_METHOD_ID);
+		assertThat(offer.paymentMethodId()).isSameAs(DUMMY_PAYMENT_METHOD_ID);
+	}
+
+	@Test
+	public void shouldThrowAnExceptionIfBasketContentsAreNotConsistentWithUsersBasketContents() {
+		given(userRepository.getForId(DUMMY_USER_ID)).willReturn(user);
+		given(user.getBasketDetails()).willReturn(new BasketDetails(emptySet(), DUMMY_USER_ID));
+
+		assertThatThrownBy(() -> offerFactory.createFor(DUMMY_BASKET_DETAILS, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID))
+				.isInstanceOf(BasketContentsChangedBeforeOfferCreatedException.class);
 	}
 
 }

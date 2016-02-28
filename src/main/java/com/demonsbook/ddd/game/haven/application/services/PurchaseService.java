@@ -9,12 +9,15 @@ import com.demonsbook.ddd.game.haven.domain.entity.User;
 import com.demonsbook.ddd.game.haven.domain.event.publisher.PurchaseCompleted;
 import com.demonsbook.ddd.game.haven.domain.exception.ProductAlreadyPurchasedException;
 import com.demonsbook.ddd.game.haven.domain.factory.OfferFactory;
+import com.demonsbook.ddd.game.haven.domain.factory.PaymentMethodId;
 import com.demonsbook.ddd.game.haven.domain.factory.ProductFactory;
 import com.demonsbook.ddd.game.haven.domain.factory.PurchaseFactory;
 import com.demonsbook.ddd.game.haven.domain.repository.GameRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.OfferRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.PurchaseRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
+import com.demonsbook.ddd.game.haven.domain.value.object.BasketDetails;
+import com.demonsbook.ddd.game.haven.domain.value.object.DeliveryMethodId;
 import com.demonsbook.ddd.game.haven.domain.value.object.GameId;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferId;
@@ -48,9 +51,13 @@ public class PurchaseService {
 		user.addToBasket(product);
 	}
 
-	public OfferDetails generateOfferFor(UserId userId) {
+	public BasketDetails getUserBasketDetails(UserId userId) {
 		User user = userRepository.getForId(userId);
-		Offer offer = offerFactory.createFor(user);
+		return user.getBasketDetails();
+	}
+
+	public OfferDetails generateOfferFor(BasketDetails basketDetails, DeliveryMethodId deliveryMethodId, PaymentMethodId paymentMethodId) {
+		Offer offer = offerFactory.createFor(basketDetails, deliveryMethodId, paymentMethodId);
 		offerRepository.save(offer);
 		return offer.getDetails();
 	}

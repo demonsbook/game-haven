@@ -2,23 +2,22 @@ package com.demonsbook.ddd.game.haven.infrastructure.storage;
 
 import com.demonsbook.ddd.game.haven.domain.entity.Offer;
 import com.demonsbook.ddd.game.haven.domain.repository.OfferRepository;
-import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
-import java.util.Collections;
-
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_DELIVERY_METHOD_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PAYMENT_METHOD_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_USER_ID;
 import static java.util.Collections.emptySet;
 
 public class InMemoryOrderRepositoryTest {
 
-	private static final UserId USER_ID = new UserId();
 	private OfferRepository offerRepository = new InMemoryOfferRepository();
 
 	@Test
 	public void shouldStoreMultipleOffers() {
-		Offer offer1 = new Offer(USER_ID, emptySet());
-		Offer offer2 = new Offer(USER_ID, emptySet());
+		Offer offer1 = new Offer(DUMMY_USER_ID, emptySet(), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
+		Offer offer2 = new Offer(DUMMY_USER_ID, emptySet(), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
 
 		offerRepository.save(offer1);
 		offerRepository.save(offer2);
@@ -29,7 +28,7 @@ public class InMemoryOrderRepositoryTest {
 
 	@Test
 	public void shouldReturnNullForNonExistentOffer() {
-		Offer offer = new Offer(USER_ID, emptySet());
+		Offer offer = new Offer(DUMMY_USER_ID, emptySet(), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
 
 		Assertions.assertThat(offerRepository.getForId(offer.id())).isNull();
 	}

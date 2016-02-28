@@ -22,6 +22,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.demonsbook.ddd.game.haven.domain.value.object.Product.Version.DIGITAL;
 import static com.demonsbook.ddd.game.haven.domain.value.object.Product.Version.DIGITAL_AND_PHYSICAL;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_DELIVERY_METHOD_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PAYMENT_METHOD_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -40,7 +42,7 @@ public class PurchaseAcceptanceTest {
 
 		Product product = purchaseService.getProduct(gameId, userId, DIGITAL);
 		purchaseService.addToUsersBasket(userId, product);
-		OfferDetails offerDetails = purchaseService.generateOfferFor(userId);
+		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
 		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 
@@ -54,7 +56,7 @@ public class PurchaseAcceptanceTest {
 
 		Product product = purchaseService.getProduct(gameId, userId, DIGITAL_AND_PHYSICAL);
 		purchaseService.addToUsersBasket(userId, product);
-		OfferDetails offerDetails = purchaseService.generateOfferFor(userId);
+		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
 		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 
@@ -69,7 +71,7 @@ public class PurchaseAcceptanceTest {
 
 		Product product = purchaseService.getProduct(gameId, otherUserId, DIGITAL);
 		purchaseService.addToUsersBasket(userId, product);
-		OfferDetails offerDetails = purchaseService.generateOfferFor(userId);
+		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
 		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 
@@ -83,7 +85,7 @@ public class PurchaseAcceptanceTest {
 		UserId userId = givenANewUser();
 		Product product = purchaseService.getProduct(gameId, userId, DIGITAL);
 		purchaseService.addToUsersBasket(userId, product);
-		OfferDetails offerDetails = purchaseService.generateOfferFor(userId);
+		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
 		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 
