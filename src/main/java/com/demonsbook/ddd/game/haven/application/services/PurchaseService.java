@@ -7,6 +7,7 @@ import com.demonsbook.ddd.game.haven.domain.entity.Purchase;
 import com.demonsbook.ddd.game.haven.domain.entity.PurchaseId;
 import com.demonsbook.ddd.game.haven.domain.entity.User;
 import com.demonsbook.ddd.game.haven.domain.event.publisher.PurchaseCompleted;
+import com.demonsbook.ddd.game.haven.domain.exception.ProductAlreadyPurchasedException;
 import com.demonsbook.ddd.game.haven.domain.factory.OfferFactory;
 import com.demonsbook.ddd.game.haven.domain.factory.ProductFactory;
 import com.demonsbook.ddd.game.haven.domain.factory.PurchaseFactory;
@@ -21,7 +22,6 @@ import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
-import com.demonsbook.ddd.game.haven.infrastructure.event.SimpleEventPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +37,7 @@ public class PurchaseService {
 	@Autowired private PurchaseRepository purchaseRepository;
 	@Autowired private DomainEventPublisher eventPublisher;
 
-	public Product getProduct(GameId gameId, UserId userId) {
+	public Product getProduct(GameId gameId, UserId userId) throws ProductAlreadyPurchasedException {
 		User user = userRepository.getForId(userId);
 		Game game = gameRepository.getForId(gameId);
 		return productFactory.createFor(user, game);

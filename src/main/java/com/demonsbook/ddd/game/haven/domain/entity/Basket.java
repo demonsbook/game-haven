@@ -1,6 +1,7 @@
 package com.demonsbook.ddd.game.haven.domain.entity;
 
 import com.demonsbook.ddd.game.haven.domain.building.blocks.Entity;
+import com.demonsbook.ddd.game.haven.domain.exception.ProductAlreadyInTheBasketException;
 import com.demonsbook.ddd.game.haven.domain.value.object.BasketId;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 
@@ -22,6 +23,9 @@ public class Basket extends Entity<BasketId> {
 	}
 
 	public void add(Product product) {
+		if (products.contains(product)) {
+			throw new ProductAlreadyInTheBasketException();
+		}
 		products.add(product);
 	}
 

@@ -1,27 +1,20 @@
 package com.demonsbook.ddd.game.haven.domain.entity;
 
-import com.demonsbook.ddd.game.haven.domain.value.object.GameId;
-import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
 import com.demonsbook.ddd.game.haven.domain.assertions.EntityAssert;
-import com.demonsbook.ddd.game.haven.domain.value.object.Product;
-import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseDetails;
-import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
+import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
 import com.google.common.collect.ImmutableSet;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import static com.demonsbook.ddd.game.haven.domain.entity.Offer.Status.ACCEPTED;
 import static com.demonsbook.ddd.game.haven.domain.entity.Offer.Status.DISCARDED;
 import static com.demonsbook.ddd.game.haven.domain.entity.Offer.Status.NEW;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PRODUCT;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class OfferTest {
 
-	private static final UserId USER_ID = new UserId();
-	private static final GameId GAME_ID = new GameId();
-	private Product product = new Product(USER_ID, GAME_ID);
-
-	private Offer offer = new Offer(USER_ID, ImmutableSet.of(product));
+	private Offer offer = new Offer(DUMMY_USER_ID, ImmutableSet.of(DUMMY_PRODUCT));
 
 	@Test
 	public void shouldBeAValidEntity() {
@@ -56,11 +49,11 @@ public class OfferTest {
 
 	@Test
 	public void shouldReturnIdOfTargetUser() {
-		assertThat(offer.userId()).isSameAs(USER_ID);
+		assertThat(offer.userId()).isSameAs(DUMMY_USER_ID);
 	}
 
 	@Test
 	public void shouldReturnTheCollectionsOfOfferedProducts() {
-		assertThat(offer.products()).containsExactly(product);
+		assertThat(offer.products()).containsExactly(DUMMY_PRODUCT);
 	}
 }

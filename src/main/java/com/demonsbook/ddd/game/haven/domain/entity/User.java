@@ -1,6 +1,7 @@
 package com.demonsbook.ddd.game.haven.domain.entity;
 
 import com.demonsbook.ddd.game.haven.domain.building.blocks.Entity;
+import com.demonsbook.ddd.game.haven.domain.exception.ProductAlreadyInTheBasketException;
 import com.demonsbook.ddd.game.haven.domain.value.object.BasketDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.GameId;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;

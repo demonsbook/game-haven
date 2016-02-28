@@ -6,6 +6,7 @@ import com.demonsbook.ddd.game.haven.domain.entity.Game;
 import com.demonsbook.ddd.game.haven.domain.entity.Offer;
 import com.demonsbook.ddd.game.haven.domain.entity.Purchase;
 import com.demonsbook.ddd.game.haven.domain.entity.User;
+import com.demonsbook.ddd.game.haven.domain.exception.ProductAlreadyPurchasedException;
 import com.demonsbook.ddd.game.haven.domain.factory.OfferFactory;
 import com.demonsbook.ddd.game.haven.domain.factory.ProductFactory;
 import com.demonsbook.ddd.game.haven.domain.factory.PurchaseFactory;
@@ -50,7 +51,7 @@ public class PurchaseServiceTest {
 	@InjectMocks private PurchaseService purchaseService;
 
 	@Test
-	public void shouldObtainProductDetailsForGivenGameAndUserCombination() {
+	public void shouldObtainProductDetailsForGivenGameAndUserCombination() throws ProductAlreadyPurchasedException {
 		given(userRepository.getForId(user.id())).willReturn(user);
 		given(gameRepository.getForId(game.id())).willReturn(game);
 		given(productFactory.createFor(user, game)).willReturn(PRODUCT);

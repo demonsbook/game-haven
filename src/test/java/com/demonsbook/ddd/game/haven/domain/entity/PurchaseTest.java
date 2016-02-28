@@ -1,24 +1,17 @@
 package com.demonsbook.ddd.game.haven.domain.entity;
 
 import com.demonsbook.ddd.game.haven.domain.assertions.EntityAssert;
-import com.demonsbook.ddd.game.haven.domain.value.object.GameId;
-import com.demonsbook.ddd.game.haven.domain.value.object.Product;
-import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
-import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
 
 import static com.demonsbook.ddd.game.haven.domain.entity.Purchase.Status.CONFIRMED;
 import static com.demonsbook.ddd.game.haven.domain.entity.Purchase.Status.NEW;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_OFFER;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PurchaseTest {
 
-	private static final UserId USER_ID = new UserId();
-	private static final GameId GAME_ID = new GameId();
-	private Product product = new Product(USER_ID, GAME_ID);
-
-	private Offer offer = new Offer(USER_ID, ImmutableSet.of(product));
-	private Purchase purchase = new Purchase(offer);
+	private Purchase purchase = new Purchase(DUMMY_OFFER);
 
 	@Test
 	public void shouldBeAValidEntity() {
@@ -39,11 +32,11 @@ public class PurchaseTest {
 
 	@Test
 	public void shouldReturnTheIdOfTheUserThatMadeThePurchase() {
-		assertThat(purchase.userId()).isSameAs(USER_ID);
+		assertThat(purchase.userId()).isSameAs(DUMMY_USER_ID);
 	}
 
 	@Test
 	public void shouldReturnTheSetOfPurchasedProducts() {
-		assertThat(purchase.products()).containsExactlyElementsOf(offer.products());
+		assertThat(purchase.products()).containsExactlyElementsOf(DUMMY_OFFER.products());
 	}
 }
