@@ -2,18 +2,23 @@ package com.demonsbook.ddd.game.haven.acceptance;
 
 import com.demonsbook.ddd.game.haven.application.services.PurchaseService;
 import com.demonsbook.ddd.game.haven.config.GameHavenConfig;
+import com.demonsbook.ddd.game.haven.domain.entity.DeliveryMethod;
 import com.demonsbook.ddd.game.haven.domain.entity.Game;
+import com.demonsbook.ddd.game.haven.domain.entity.PaymentMethod;
 import com.demonsbook.ddd.game.haven.domain.entity.User;
 import com.demonsbook.ddd.game.haven.domain.exception.ProductAlreadyPurchasedException;
+import com.demonsbook.ddd.game.haven.domain.repository.DeliveryMethodRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.GameRepository;
+import com.demonsbook.ddd.game.haven.domain.repository.PaymentMethodRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
+import com.demonsbook.ddd.game.haven.domain.value.object.DeliveryMethodId;
 import com.demonsbook.ddd.game.haven.domain.value.object.GameId;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
+import com.demonsbook.ddd.game.haven.domain.value.object.PaymentMethodId;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
-import com.demonsbook.ddd.game.haven.infrastructure.storage.InMemoryGameRepository;
-import com.demonsbook.ddd.game.haven.infrastructure.storage.InMemoryUserRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +27,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.demonsbook.ddd.game.haven.domain.value.object.Product.Version.DIGITAL;
 import static com.demonsbook.ddd.game.haven.domain.value.object.Product.Version.DIGITAL_AND_PHYSICAL;
-import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_DELIVERY_METHOD_ID;
-import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PAYMENT_METHOD_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -31,9 +34,20 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @ContextConfiguration(classes = GameHavenConfig.class)
 public class PurchaseAcceptanceTest {
 
-	@Autowired private GameRepository gameRepository = new InMemoryGameRepository();
-	@Autowired private UserRepository userRepository = new InMemoryUserRepository();
-	@Autowired private PurchaseService purchaseService = new PurchaseService();
+	@Autowired private GameRepository gameRepository;
+	@Autowired private UserRepository userRepository;
+	@Autowired private DeliveryMethodRepository deliveryMethodRepository;
+	@Autowired private PaymentMethodRepository paymentMethodRepository;
+	@Autowired private PurchaseService purchaseService;
+
+	private DeliveryMethodId deliveryMethodId;
+	private PaymentMethodId paymentMethodId;
+
+	@Before
+	public void init() {
+		deliveryMethodId = givenADeliveryMethod();
+		paymentMethodId = givenAPaymentMethod();
+	}
 
 	@Test
 	public void shouldBeAbleToBuyAProduct() throws ProductAlreadyPurchasedException {
@@ -42,7 +56,7 @@ public class PurchaseAcceptanceTest {
 
 		Product product = purchaseService.getProduct(gameId, userId, DIGITAL);
 		purchaseService.addToUsersBasket(userId, product);
-		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
+		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId), deliveryMethodId, paymentMethodId);
 		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 
@@ -56,7 +70,7 @@ public class PurchaseAcceptanceTest {
 
 		Product product = purchaseService.getProduct(gameId, userId, DIGITAL_AND_PHYSICAL);
 		purchaseService.addToUsersBasket(userId, product);
-		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
+		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId), deliveryMethodId, paymentMethodId);
 		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 
@@ -71,7 +85,7 @@ public class PurchaseAcceptanceTest {
 
 		Product product = purchaseService.getProduct(gameId, otherUserId, DIGITAL);
 		purchaseService.addToUsersBasket(userId, product);
-		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
+		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId),deliveryMethodId,  paymentMethodId);
 		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 
@@ -85,7 +99,7 @@ public class PurchaseAcceptanceTest {
 		UserId userId = givenANewUser();
 		Product product = purchaseService.getProduct(gameId, userId, DIGITAL);
 		purchaseService.addToUsersBasket(userId, product);
-		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
+		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId), deliveryMethodId, paymentMethodId);
 		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 
@@ -109,5 +123,17 @@ public class PurchaseAcceptanceTest {
 		game.physicalVersionIsAvailable();
 		gameRepository.save(game);
 		return game.id();
+	}
+
+	private DeliveryMethodId givenADeliveryMethod() {
+		DeliveryMethod deliveryMethod = new DeliveryMethod();
+		deliveryMethodRepository.save(deliveryMethod);
+		return deliveryMethod.id();
+	}
+
+	private PaymentMethodId givenAPaymentMethod() {
+		PaymentMethod paymentMethod = new PaymentMethod();
+		paymentMethodRepository.save(paymentMethod);
+		return paymentMethod.id();
 	}
 }

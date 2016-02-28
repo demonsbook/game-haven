@@ -9,7 +9,7 @@ import com.demonsbook.ddd.game.haven.domain.entity.User;
 import com.demonsbook.ddd.game.haven.domain.event.publisher.PurchaseCompleted;
 import com.demonsbook.ddd.game.haven.domain.exception.ProductAlreadyPurchasedException;
 import com.demonsbook.ddd.game.haven.domain.factory.OfferFactory;
-import com.demonsbook.ddd.game.haven.domain.factory.PaymentMethodId;
+import com.demonsbook.ddd.game.haven.domain.value.object.PaymentMethodId;
 import com.demonsbook.ddd.game.haven.domain.factory.ProductFactory;
 import com.demonsbook.ddd.game.haven.domain.factory.PurchaseFactory;
 import com.demonsbook.ddd.game.haven.domain.repository.GameRepository;

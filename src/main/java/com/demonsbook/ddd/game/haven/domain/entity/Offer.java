@@ -1,7 +1,7 @@
 package com.demonsbook.ddd.game.haven.domain.entity;
 
 import com.demonsbook.ddd.game.haven.domain.building.blocks.Entity;
-import com.demonsbook.ddd.game.haven.domain.factory.PaymentMethodId;
+import com.demonsbook.ddd.game.haven.domain.value.object.PaymentMethodId;
 import com.demonsbook.ddd.game.haven.domain.value.object.DeliveryMethodId;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferId;

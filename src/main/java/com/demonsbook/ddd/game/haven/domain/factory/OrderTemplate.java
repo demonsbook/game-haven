@@ -2,6 +2,7 @@ package com.demonsbook.ddd.game.haven.domain.factory;
 
 import com.demonsbook.ddd.game.haven.domain.value.object.BasketDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.DeliveryMethodId;
+import com.demonsbook.ddd.game.haven.domain.value.object.PaymentMethodId;
 
 public class OrderTemplate {
 	private final BasketDetails basketDetails;

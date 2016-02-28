@@ -6,6 +6,7 @@ import com.demonsbook.ddd.game.haven.domain.exception.BasketContentsChangedBefor
 import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
 import com.demonsbook.ddd.game.haven.domain.value.object.BasketDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.DeliveryMethodId;
+import com.demonsbook.ddd.game.haven.domain.value.object.PaymentMethodId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
