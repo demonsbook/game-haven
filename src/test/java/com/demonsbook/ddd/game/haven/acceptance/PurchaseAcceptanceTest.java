@@ -27,17 +27,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @ContextConfiguration(classes = GameHavenConfig.class)
 public class PurchaseAcceptanceTest {
 
-	private GameId gameId;
-	private UserId userId;
-
 	@Autowired private GameRepository gameRepository = new InMemoryGameRepository();
 	@Autowired private UserRepository userRepository = new InMemoryUserRepository();
 	@Autowired private PurchaseService purchaseService = new PurchaseService();
 
 	@Test
 	public void shouldBeAbleToBuyAProduct() throws ProductAlreadyPurchasedException {
-		givenAGameInTheCatalog();
-		givenANewUser();
+		GameId gameId = givenAGameInTheCatalog();
+		UserId userId = givenANewUser();
 
 		Product product = purchaseService.getProduct(gameId, userId);
 		purchaseService.addToUsersBasket(userId, product);
@@ -49,9 +46,25 @@ public class PurchaseAcceptanceTest {
 	}
 
 	@Test
+	public void shouldBeAbleToBuyAProductForSomeoneElse() throws ProductAlreadyPurchasedException {
+		GameId gameId = givenAGameInTheCatalog();
+		UserId userId = givenANewUser();
+		UserId otherUserId = givenANewUser();
+
+		Product product = purchaseService.getProduct(gameId, otherUserId);
+		purchaseService.addToUsersBasket(userId, product);
+		OfferDetails offerDetails = purchaseService.generateOfferFor(userId);
+		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
+		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
+
+		assertThat(purchaseService.getUserDetails(otherUserId).getGames()).contains(gameId);
+		assertThat(purchaseService.getUserDetails(userId).getGames()).doesNotContain(gameId);
+	}
+
+	@Test
 	public void shouldNotBeAbleToGenerateAProductIfItHadBeenAlreadyPurchased() throws ProductAlreadyPurchasedException {
-		givenAGameInTheCatalog();
-		givenANewUser();
+		GameId gameId = givenAGameInTheCatalog();
+		UserId userId = givenANewUser();
 		Product product = purchaseService.getProduct(gameId, userId);
 		purchaseService.addToUsersBasket(userId, product);
 		OfferDetails offerDetails = purchaseService.generateOfferFor(userId);
@@ -61,15 +74,15 @@ public class PurchaseAcceptanceTest {
 		assertThatThrownBy(() -> purchaseService.getProduct(gameId, userId)).isInstanceOf(ProductAlreadyPurchasedException.class);
 	}
 
-	private void givenANewUser() {
+	private UserId givenANewUser() {
 		User user = new User();
 		userRepository.save(user);
-		userId = user.id();
+		return user.id();
 	}
 
-	private void givenAGameInTheCatalog() {
+	private GameId givenAGameInTheCatalog() {
 		Game game =  new Game();
 		gameRepository.save(game);
-		gameId = game.id();
+		return game.id();
 	}
 }
