@@ -1,4 +1,4 @@
-package com.demonsbook.ddd.game.haven.domain.acceptance;
+package com.demonsbook.ddd.game.haven.acceptance;
 
 import com.demonsbook.ddd.game.haven.application.services.PurchaseService;
 import com.demonsbook.ddd.game.haven.config.GameHavenConfig;
