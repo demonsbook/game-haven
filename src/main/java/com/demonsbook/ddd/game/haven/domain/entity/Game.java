@@ -11,6 +11,7 @@ import static java.math.BigDecimal.ZERO;
 public class Game extends Entity<GameId> {
 
 	private Money price = new Money(ZERO, Currency.getInstance("PLN"));
+	private boolean hasAPhysicalVersion = false;
 
 	public Game() {
 		super(new GameId());
@@ -18,6 +19,18 @@ public class Game extends Entity<GameId> {
 
 	public void setPriceTo(Money price) {
 		this.price = price;
+	}
+
+	public void physicalVersionIsAvailable() {
+		this.hasAPhysicalVersion = true;
+	}
+
+	public void physicalVersionIsNotAvailable() {
+		this.hasAPhysicalVersion = false;
+	}
+
+	public boolean hasAPhysicalVersion() {
+		return hasAPhysicalVersion;
 	}
 
 	public Money price() {

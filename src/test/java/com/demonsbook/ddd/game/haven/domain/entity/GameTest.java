@@ -24,4 +24,25 @@ public class GameTest {
 
 		Assertions.assertThat(game.price()).isEqualTo(price);
 	}
+
+	@Test
+	public void shouldNotHaveAPhysicalVersionByDefault() {
+		Assertions.assertThat(game.hasAPhysicalVersion()).isFalse();
+	}
+
+	@Test
+	public void shouldBeAllowedToHaveAPhysicalVersion() {
+		game.physicalVersionIsAvailable();
+
+		Assertions.assertThat(game.hasAPhysicalVersion()).isTrue();
+	}
+
+	@Test
+	public void shouldBeAllowedToNoLongerHaveAPhysicalVersion() {
+		game.physicalVersionIsAvailable();
+
+		game.physicalVersionIsNotAvailable();
+
+		Assertions.assertThat(game.hasAPhysicalVersion()).isFalse();
+	}
 }

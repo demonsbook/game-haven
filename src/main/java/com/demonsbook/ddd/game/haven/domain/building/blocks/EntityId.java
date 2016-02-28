@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.UUID;
 
+import static java.lang.String.format;
+
 public abstract class EntityId {
 	private final UUID uuid;
 
@@ -44,4 +46,12 @@ public abstract class EntityId {
 				.toHashCode();
 	}
 
+	@Override
+	public String toString() {
+		return format("%s{uuid=%s}", getClassName(), uuid);
+	}
+
+	private String getClassName() {
+		return this.getClass().getSimpleName();
+	}
 }

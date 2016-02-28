@@ -25,6 +25,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static com.demonsbook.ddd.game.haven.domain.entity.Offer.Status.ACCEPTED;
+import static com.demonsbook.ddd.game.haven.domain.value.object.Product.Version.DIGITAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -32,13 +33,13 @@ import static org.mockito.BDDMockito.then;
 @RunWith(MockitoJUnitRunner.class)
 public class PurchaseServiceTest {
 
+	private static final Product.Version ANY_VERSION = DIGITAL;
+
 	private User user = new User();
 	private Game game = new Game();
-	private Product product = new Product(user.id(), game.id());
+	private Product product = new Product(user.id(), game.id(), ANY_VERSION);
 	private Offer offer = new Offer(user.id(), ImmutableSet.of(product));
 	private Purchase purchase = new Purchase(offer);
-
-	private Product PRODUCT = new Product(user.id(), game.id());
 
 	@Mock private ProductFactory productFactory;
 	@Mock private PurchaseFactory purchaseFactory;
@@ -51,23 +52,23 @@ public class PurchaseServiceTest {
 	@InjectMocks private PurchaseService purchaseService;
 
 	@Test
-	public void shouldObtainProductDetailsForGivenGameAndUserCombination() throws ProductAlreadyPurchasedException {
+	public void shouldObtainProductForGivenGameAndUserCombination() throws ProductAlreadyPurchasedException {
 		given(userRepository.getForId(user.id())).willReturn(user);
 		given(gameRepository.getForId(game.id())).willReturn(game);
-		given(productFactory.createFor(user, game)).willReturn(PRODUCT);
+		given(productFactory.createFor(user, game, DIGITAL)).willReturn(product);
 
-		Product product = purchaseService.getProduct(game.id(), user.id());
+		Product product = purchaseService.getProduct(game.id(), user.id(), DIGITAL);
 
-		assertThat(product).isSameAs(PRODUCT);
+		assertThat(product).isSameAs(product);
 	}
 
 	@Test
-	public void shouldAddProductsToBasker() {
+	public void shouldAddProductsToBasket() {
 		given(userRepository.getForId(user.id())).willReturn(user);
 
-		purchaseService.addToUsersBasket(user.id(), PRODUCT);
+		purchaseService.addToUsersBasket(user.id(), product);
 
-		assertThat(user.getBasketDetails().getProducts()).contains(PRODUCT);
+		assertThat(user.getBasketDetails().getProducts()).contains(product);
 	}
 
 	@Test

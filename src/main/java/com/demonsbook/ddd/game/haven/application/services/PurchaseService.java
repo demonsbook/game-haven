@@ -37,10 +37,10 @@ public class PurchaseService {
 	@Autowired private PurchaseRepository purchaseRepository;
 	@Autowired private DomainEventPublisher eventPublisher;
 
-	public Product getProduct(GameId gameId, UserId userId) throws ProductAlreadyPurchasedException {
+	public Product getProduct(GameId gameId, UserId userId, Product.Version version) throws ProductAlreadyPurchasedException {
 		User user = userRepository.getForId(userId);
 		Game game = gameRepository.getForId(gameId);
-		return productFactory.createFor(user, game);
+		return productFactory.createFor(user, game, version);
 	}
 
 	public void addToUsersBasket(UserId userId, Product product) {

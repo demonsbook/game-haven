@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static com.demonsbook.ddd.game.haven.domain.value.object.Product.Version.DIGITAL;
+import static com.demonsbook.ddd.game.haven.domain.value.object.Product.Version.DIGITAL_AND_PHYSICAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -36,7 +38,21 @@ public class PurchaseAcceptanceTest {
 		GameId gameId = givenAGameInTheCatalog();
 		UserId userId = givenANewUser();
 
-		Product product = purchaseService.getProduct(gameId, userId);
+		Product product = purchaseService.getProduct(gameId, userId, DIGITAL);
+		purchaseService.addToUsersBasket(userId, product);
+		OfferDetails offerDetails = purchaseService.generateOfferFor(userId);
+		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
+		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
+
+		assertThat(purchaseService.getUserDetails(userId).getGames()).contains(gameId);
+	}
+
+	@Test
+	public void shouldBeAbleToBuyADigitalAndPhysicalCopyOfTheProduct() throws ProductAlreadyPurchasedException {
+		GameId gameId = givenAGameWithPhysicalVersionInTheCatalog();
+		UserId userId = givenANewUser();
+
+		Product product = purchaseService.getProduct(gameId, userId, DIGITAL_AND_PHYSICAL);
 		purchaseService.addToUsersBasket(userId, product);
 		OfferDetails offerDetails = purchaseService.generateOfferFor(userId);
 		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
@@ -51,7 +67,7 @@ public class PurchaseAcceptanceTest {
 		UserId userId = givenANewUser();
 		UserId otherUserId = givenANewUser();
 
-		Product product = purchaseService.getProduct(gameId, otherUserId);
+		Product product = purchaseService.getProduct(gameId, otherUserId, DIGITAL);
 		purchaseService.addToUsersBasket(userId, product);
 		OfferDetails offerDetails = purchaseService.generateOfferFor(userId);
 		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
@@ -65,13 +81,13 @@ public class PurchaseAcceptanceTest {
 	public void shouldNotBeAbleToGenerateAProductIfItHadBeenAlreadyPurchased() throws ProductAlreadyPurchasedException {
 		GameId gameId = givenAGameInTheCatalog();
 		UserId userId = givenANewUser();
-		Product product = purchaseService.getProduct(gameId, userId);
+		Product product = purchaseService.getProduct(gameId, userId, DIGITAL);
 		purchaseService.addToUsersBasket(userId, product);
 		OfferDetails offerDetails = purchaseService.generateOfferFor(userId);
 		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 
-		assertThatThrownBy(() -> purchaseService.getProduct(gameId, userId)).isInstanceOf(ProductAlreadyPurchasedException.class);
+		assertThatThrownBy(() -> purchaseService.getProduct(gameId, userId, DIGITAL)).isInstanceOf(ProductAlreadyPurchasedException.class);
 	}
 
 	private UserId givenANewUser() {
@@ -82,6 +98,13 @@ public class PurchaseAcceptanceTest {
 
 	private GameId givenAGameInTheCatalog() {
 		Game game =  new Game();
+		gameRepository.save(game);
+		return game.id();
+	}
+
+	private GameId givenAGameWithPhysicalVersionInTheCatalog() {
+		Game game =  new Game();
+		game.physicalVersionIsAvailable();
 		gameRepository.save(game);
 		return game.id();
 	}

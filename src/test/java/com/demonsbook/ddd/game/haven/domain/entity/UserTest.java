@@ -5,6 +5,7 @@ import com.demonsbook.ddd.game.haven.domain.value.object.BasketDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import org.junit.Test;
 
+import static com.demonsbook.ddd.game.haven.domain.value.object.Product.Version.DIGITAL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserTest {
@@ -38,7 +39,7 @@ public class UserTest {
 
 	@Test
 	public void shouldAddProductsToTheBasket() {
-		Product product = new Product(user.id(), game.id());
+		Product product = new Product(user.id(), game.id(), DIGITAL);
 		user.addToBasket(product);
 
 		BasketDetails basketDetails = user.getBasketDetails();
