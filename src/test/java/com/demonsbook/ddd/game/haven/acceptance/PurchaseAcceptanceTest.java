@@ -1,5 +1,6 @@
 package com.demonsbook.ddd.game.haven.acceptance;
 
+import com.demonsbook.ddd.game.haven.application.services.OfferService;
 import com.demonsbook.ddd.game.haven.application.services.PurchaseService;
 import com.demonsbook.ddd.game.haven.config.GameHavenConfig;
 import com.demonsbook.ddd.game.haven.domain.entity.DeliveryMethod;
@@ -7,6 +8,7 @@ import com.demonsbook.ddd.game.haven.domain.entity.Game;
 import com.demonsbook.ddd.game.haven.domain.entity.PaymentMethod;
 import com.demonsbook.ddd.game.haven.domain.entity.User;
 import com.demonsbook.ddd.game.haven.domain.exception.ProductAlreadyPurchasedException;
+import com.demonsbook.ddd.game.haven.domain.factory.ProductFactory;
 import com.demonsbook.ddd.game.haven.domain.repository.DeliveryMethodRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.GameRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.PaymentMethodRepository;
@@ -39,7 +41,9 @@ public class PurchaseAcceptanceTest {
 	@Autowired private UserRepository userRepository;
 	@Autowired private DeliveryMethodRepository deliveryMethodRepository;
 	@Autowired private PaymentMethodRepository paymentMethodRepository;
+	@Autowired private ProductFactory productFactory;
 	@Autowired private PurchaseService purchaseService;
+	@Autowired private OfferService offerService;
 
 	private DeliveryMethodId deliveryMethodId;
 	private PaymentMethodId paymentMethodId;
@@ -55,10 +59,10 @@ public class PurchaseAcceptanceTest {
 		GameId gameId = givenAGameInTheCatalog();
 		UserId userId = givenANewUser();
 
-		Product product = purchaseService.getProduct(gameId, userId, DIGITAL);
+		Product product = productFactory.createFor(userId, gameId, DIGITAL);
 		purchaseService.addToUsersBasket(userId, product);
-		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId), deliveryMethodId, paymentMethodId);
-		purchaseService.acceptOffer(offerDetails.offerId());
+		OfferDetails offerDetails = offerService.generateOfferFor(purchaseService.getUserBasketDetails(userId), deliveryMethodId, paymentMethodId);
+		offerService.acceptOffer(offerDetails.offerId());
 		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 
@@ -70,10 +74,10 @@ public class PurchaseAcceptanceTest {
 		GameId gameId = givenAGameWithPhysicalVersionInTheCatalog();
 		UserId userId = givenANewUser();
 
-		Product product = purchaseService.getProduct(gameId, userId, DIGITAL_AND_PHYSICAL);
+		Product product = productFactory.createFor(userId, gameId, DIGITAL_AND_PHYSICAL);
 		purchaseService.addToUsersBasket(userId, product);
-		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId), deliveryMethodId, paymentMethodId);
-		purchaseService.acceptOffer(offerDetails.offerId());
+		OfferDetails offerDetails = offerService.generateOfferFor(purchaseService.getUserBasketDetails(userId), deliveryMethodId, paymentMethodId);
+		offerService.acceptOffer(offerDetails.offerId());
 		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 
@@ -86,10 +90,10 @@ public class PurchaseAcceptanceTest {
 		UserId userId = givenANewUser();
 		UserId otherUserId = givenANewUser();
 
-		Product product = purchaseService.getProduct(gameId, otherUserId, DIGITAL);
+		Product product = productFactory.createFor(otherUserId, gameId, DIGITAL);
 		purchaseService.addToUsersBasket(userId, product);
-		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId),deliveryMethodId,  paymentMethodId);
-		purchaseService.acceptOffer(offerDetails.offerId());
+		OfferDetails offerDetails = offerService.generateOfferFor(purchaseService.getUserBasketDetails(userId),deliveryMethodId,  paymentMethodId);
+		offerService.acceptOffer(offerDetails.offerId());
 		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 
@@ -101,14 +105,14 @@ public class PurchaseAcceptanceTest {
 	public void shouldNotBeAbleToGenerateAProductIfItHadBeenAlreadyPurchased() throws ProductAlreadyPurchasedException {
 		GameId gameId = givenAGameInTheCatalog();
 		UserId userId = givenANewUser();
-		Product product = purchaseService.getProduct(gameId, userId, DIGITAL);
+		Product product = productFactory.createFor(userId, gameId, DIGITAL);
 		purchaseService.addToUsersBasket(userId, product);
-		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId), deliveryMethodId, paymentMethodId);
-		purchaseService.acceptOffer(offerDetails.offerId());
+		OfferDetails offerDetails = offerService.generateOfferFor(purchaseService.getUserBasketDetails(userId), deliveryMethodId, paymentMethodId);
+		offerService.acceptOffer(offerDetails.offerId());
 		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 
-		assertThatThrownBy(() -> purchaseService.getProduct(gameId, userId, DIGITAL)).isInstanceOf(ProductAlreadyPurchasedException.class);
+		assertThatThrownBy(() -> productFactory.createFor(userId, gameId, DIGITAL)).isInstanceOf(ProductAlreadyPurchasedException.class);
 	}
 
 	private UserId givenANewUser() {
