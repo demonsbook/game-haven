@@ -1,10 +1,10 @@
 package com.demonsbook.ddd.game.haven.domain.entity;
 
 import com.demonsbook.ddd.game.haven.domain.building.blocks.Entity;
-import com.demonsbook.ddd.game.haven.domain.value.object.PaymentMethodId;
 import com.demonsbook.ddd.game.haven.domain.value.object.DeliveryMethodId;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferId;
+import com.demonsbook.ddd.game.haven.domain.value.object.PaymentMethodId;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
 import com.google.common.collect.ImmutableSet;
@@ -43,7 +43,7 @@ public class Offer extends Entity<OfferId> {
 		status = ACCEPTED;
 	}
 
-	public void discard() {
+	void discard() {
 		status = DISCARDED;
 	}
 

@@ -6,10 +6,10 @@ import com.demonsbook.ddd.game.haven.domain.entity.Offer;
 import com.demonsbook.ddd.game.haven.domain.entity.Purchase;
 import com.demonsbook.ddd.game.haven.domain.entity.PurchaseId;
 import com.demonsbook.ddd.game.haven.domain.entity.User;
-import com.demonsbook.ddd.game.haven.domain.event.publisher.PurchaseCompleted;
+import com.demonsbook.ddd.game.haven.domain.event.OfferAccepted;
+import com.demonsbook.ddd.game.haven.domain.event.PurchaseCompleted;
 import com.demonsbook.ddd.game.haven.domain.exception.ProductAlreadyPurchasedException;
 import com.demonsbook.ddd.game.haven.domain.factory.OfferFactory;
-import com.demonsbook.ddd.game.haven.domain.value.object.PaymentMethodId;
 import com.demonsbook.ddd.game.haven.domain.factory.ProductFactory;
 import com.demonsbook.ddd.game.haven.domain.factory.PurchaseFactory;
 import com.demonsbook.ddd.game.haven.domain.repository.GameRepository;
@@ -21,12 +21,17 @@ import com.demonsbook.ddd.game.haven.domain.value.object.DeliveryMethodId;
 import com.demonsbook.ddd.game.haven.domain.value.object.GameId;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferId;
+import com.demonsbook.ddd.game.haven.domain.value.object.PaymentMethodId;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class PurchaseService {
@@ -62,12 +67,10 @@ public class PurchaseService {
 		return offer.getDetails();
 	}
 
-	public PurchaseDetails acceptOffer(OfferId offerId) {
+	public void acceptOffer(OfferId offerId) {
 		Offer offer = offerRepository.getForId(offerId);
 		offer.accept();
-		Purchase purchase = purchaseFactory.createFor(offer);
-		purchaseRepository.save(purchase);
-		return purchase.getDetails();
+		eventPublisher.publish(new OfferAccepted(offerId));
 	}
 
 	public void confirmPurchase(PurchaseId purchaseId) {
@@ -79,5 +82,10 @@ public class PurchaseService {
 	public UserDetails getUserDetails(UserId userId) {
 		User user = userRepository.getForId(userId);
 		return user.details();
+	}
+
+	public Collection<PurchaseDetails> getPurchasesOfUser(UserId userId) {
+		Collection<Purchase> purchases = purchaseRepository.getAll();
+		return purchases.stream().filter(purchase -> purchase.userId().equals(userId)).map(Purchase::getDetails).collect(toList());
 	}
 }

@@ -16,7 +16,6 @@ import com.demonsbook.ddd.game.haven.domain.repository.PurchaseRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
-import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserDetails;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
@@ -93,17 +92,6 @@ public class PurchaseServiceTest {
 		purchaseService.acceptOffer(offer.id());
 
 		assertThat(offer.status()).isSameAs(ACCEPTED);
-	}
-
-	@Test
-	public void shouldGenerateAndStorePurchaseAfterOfferHadBeenSuccesfullyAccepted() {
-		given(offerRepository.getForId(offer.id())).willReturn(offer);
-		given(purchaseFactory.createFor(offer)).willReturn(purchase);
-
-		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offer.id());
-
-		assertThat(purchaseDetails).isNotNull();
-		then(purchaseRepository).should().save(purchase);
 	}
 
 	@Test

@@ -27,6 +27,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.demonsbook.ddd.game.haven.domain.value.object.Product.Version.DIGITAL;
 import static com.demonsbook.ddd.game.haven.domain.value.object.Product.Version.DIGITAL_AND_PHYSICAL;
+import static com.google.common.collect.Iterables.getOnlyElement;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -57,7 +58,8 @@ public class PurchaseAcceptanceTest {
 		Product product = purchaseService.getProduct(gameId, userId, DIGITAL);
 		purchaseService.addToUsersBasket(userId, product);
 		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId), deliveryMethodId, paymentMethodId);
-		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
+		purchaseService.acceptOffer(offerDetails.offerId());
+		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 
 		assertThat(purchaseService.getUserDetails(userId).getGames()).contains(gameId);
@@ -71,7 +73,8 @@ public class PurchaseAcceptanceTest {
 		Product product = purchaseService.getProduct(gameId, userId, DIGITAL_AND_PHYSICAL);
 		purchaseService.addToUsersBasket(userId, product);
 		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId), deliveryMethodId, paymentMethodId);
-		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
+		purchaseService.acceptOffer(offerDetails.offerId());
+		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 
 		assertThat(purchaseService.getUserDetails(userId).getGames()).contains(gameId);
@@ -86,7 +89,8 @@ public class PurchaseAcceptanceTest {
 		Product product = purchaseService.getProduct(gameId, otherUserId, DIGITAL);
 		purchaseService.addToUsersBasket(userId, product);
 		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId),deliveryMethodId,  paymentMethodId);
-		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
+		purchaseService.acceptOffer(offerDetails.offerId());
+		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 
 		assertThat(purchaseService.getUserDetails(otherUserId).getGames()).contains(gameId);
@@ -100,7 +104,8 @@ public class PurchaseAcceptanceTest {
 		Product product = purchaseService.getProduct(gameId, userId, DIGITAL);
 		purchaseService.addToUsersBasket(userId, product);
 		OfferDetails offerDetails = purchaseService.generateOfferFor(purchaseService.getUserBasketDetails(userId), deliveryMethodId, paymentMethodId);
-		PurchaseDetails purchaseDetails = purchaseService.acceptOffer(offerDetails.offerId());
+		purchaseService.acceptOffer(offerDetails.offerId());
+		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
 
 		assertThatThrownBy(() -> purchaseService.getProduct(gameId, userId, DIGITAL)).isInstanceOf(ProductAlreadyPurchasedException.class);

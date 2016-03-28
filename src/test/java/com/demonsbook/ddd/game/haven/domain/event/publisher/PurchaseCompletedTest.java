@@ -2,6 +2,7 @@ package com.demonsbook.ddd.game.haven.domain.event.publisher;
 
 import com.demonsbook.ddd.game.haven.domain.assertions.ValueObjectAssert;
 import com.demonsbook.ddd.game.haven.domain.entity.PurchaseId;
+import com.demonsbook.ddd.game.haven.domain.event.PurchaseCompleted;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

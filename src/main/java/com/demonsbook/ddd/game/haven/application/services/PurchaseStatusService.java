@@ -5,7 +5,7 @@ import com.demonsbook.ddd.game.haven.domain.building.blocks.DomainEventListener;
 import com.demonsbook.ddd.game.haven.domain.building.blocks.DomainEventPublisher;
 import com.demonsbook.ddd.game.haven.domain.entity.Purchase;
 import com.demonsbook.ddd.game.haven.domain.entity.User;
-import com.demonsbook.ddd.game.haven.domain.event.publisher.PurchaseCompleted;
+import com.demonsbook.ddd.game.haven.domain.event.PurchaseCompleted;
 import com.demonsbook.ddd.game.haven.domain.repository.PurchaseRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 
 @Service
-public class PurchaseStatusService implements DomainEventListener {
+public class PurchaseStatusService extends DomainEventListener {
 
 	@Autowired private UserRepository userRepository;
 	@Autowired private PurchaseRepository purchaseRepository;
@@ -23,18 +23,11 @@ public class PurchaseStatusService implements DomainEventListener {
 
 	@PostConstruct
 	public void subscribeToTrigger() {
-		eventPublisher.subscribeTo(this::purchaseCompletedEventPredicate, this);
+		subscribeTo(this::purchaseCompletedEventPredicate, this::handleEvent);
 	}
 
-	@Override
-	public void handle(DomainEvent event) {
-		if (purchaseCompletedEventPredicate(event)) {
-			handle((PurchaseCompleted) event);
-		}
-	}
-
-	private void handle(PurchaseCompleted event) {
-		Purchase purchase = purchaseRepository.getForId(event.purchaseId());
+	private void handleEvent(DomainEvent event) {
+		Purchase purchase = purchaseRepository.getForId(((PurchaseCompleted) event).purchaseId());
 		purchase.products().forEach(this::realisePurchaseOf);
 	}
 
@@ -46,6 +39,5 @@ public class PurchaseStatusService implements DomainEventListener {
 	private boolean purchaseCompletedEventPredicate(DomainEvent event) {
 		return event instanceof PurchaseCompleted;
 	}
-
 
 }
