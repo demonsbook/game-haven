@@ -5,14 +5,8 @@ import com.demonsbook.ddd.game.haven.domain.entity.Purchase;
 import com.demonsbook.ddd.game.haven.domain.entity.PurchaseId;
 import com.demonsbook.ddd.game.haven.domain.entity.User;
 import com.demonsbook.ddd.game.haven.domain.event.PurchaseCompleted;
-import com.demonsbook.ddd.game.haven.domain.factory.OfferFactory;
-import com.demonsbook.ddd.game.haven.domain.factory.ProductFactory;
-import com.demonsbook.ddd.game.haven.domain.factory.PurchaseFactory;
-import com.demonsbook.ddd.game.haven.domain.repository.GameRepository;
-import com.demonsbook.ddd.game.haven.domain.repository.OfferRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.PurchaseRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
-import com.demonsbook.ddd.game.haven.domain.value.object.BasketDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserDetails;
@@ -31,14 +25,9 @@ public class PurchaseService {
 	@Autowired private PurchaseRepository purchaseRepository;
 	@Autowired private DomainEventPublisher eventPublisher;
 
-	public void addToUsersBasket(UserId userId, Product product) {
+	public void addProductToUsersBasket(UserId userId, Product product) {
 		User user = userRepository.getForId(userId);
 		user.addToBasket(product);
-	}
-
-	public BasketDetails getUserBasketDetails(UserId userId) {
-		User user = userRepository.getForId(userId);
-		return user.getBasketDetails();
 	}
 
 	public void confirmPurchase(PurchaseId purchaseId) {

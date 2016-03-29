@@ -43,7 +43,7 @@ public class PurchaseServiceTest {
 	public void shouldAddProductsToBasket() {
 		given(userRepository.getForId(user.id())).willReturn(user);
 
-		purchaseService.addToUsersBasket(user.id(), product);
+		purchaseService.addProductToUsersBasket(user.id(), product);
 
 		assertThat(user.getBasketDetails().getProducts()).contains(product);
 	}

@@ -60,8 +60,8 @@ public class PurchaseAcceptanceTest {
 		UserId userId = givenANewUser();
 
 		Product product = productFactory.createFor(userId, gameId, DIGITAL);
-		purchaseService.addToUsersBasket(userId, product);
-		OfferDetails offerDetails = offerService.generateOfferFor(purchaseService.getUserBasketDetails(userId), deliveryMethodId, paymentMethodId);
+		purchaseService.addProductToUsersBasket(userId, product);
+		OfferDetails offerDetails = offerService.generateOfferFor(userId, deliveryMethodId, paymentMethodId);
 		offerService.acceptOffer(offerDetails.offerId());
 		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
@@ -75,8 +75,8 @@ public class PurchaseAcceptanceTest {
 		UserId userId = givenANewUser();
 
 		Product product = productFactory.createFor(userId, gameId, DIGITAL_AND_PHYSICAL);
-		purchaseService.addToUsersBasket(userId, product);
-		OfferDetails offerDetails = offerService.generateOfferFor(purchaseService.getUserBasketDetails(userId), deliveryMethodId, paymentMethodId);
+		purchaseService.addProductToUsersBasket(userId, product);
+		OfferDetails offerDetails = offerService.generateOfferFor(userId, deliveryMethodId, paymentMethodId);
 		offerService.acceptOffer(offerDetails.offerId());
 		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
@@ -91,8 +91,8 @@ public class PurchaseAcceptanceTest {
 		UserId otherUserId = givenANewUser();
 
 		Product product = productFactory.createFor(otherUserId, gameId, DIGITAL);
-		purchaseService.addToUsersBasket(userId, product);
-		OfferDetails offerDetails = offerService.generateOfferFor(purchaseService.getUserBasketDetails(userId),deliveryMethodId,  paymentMethodId);
+		purchaseService.addProductToUsersBasket(userId, product);
+		OfferDetails offerDetails = offerService.generateOfferFor(userId,deliveryMethodId,  paymentMethodId);
 		offerService.acceptOffer(offerDetails.offerId());
 		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
@@ -106,8 +106,8 @@ public class PurchaseAcceptanceTest {
 		GameId gameId = givenAGameInTheCatalog();
 		UserId userId = givenANewUser();
 		Product product = productFactory.createFor(userId, gameId, DIGITAL);
-		purchaseService.addToUsersBasket(userId, product);
-		OfferDetails offerDetails = offerService.generateOfferFor(purchaseService.getUserBasketDetails(userId), deliveryMethodId, paymentMethodId);
+		purchaseService.addProductToUsersBasket(userId, product);
+		OfferDetails offerDetails = offerService.generateOfferFor(userId, deliveryMethodId, paymentMethodId);
 		offerService.acceptOffer(offerDetails.offerId());
 		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
 		purchaseService.confirmPurchase(purchaseDetails.purchaseId());

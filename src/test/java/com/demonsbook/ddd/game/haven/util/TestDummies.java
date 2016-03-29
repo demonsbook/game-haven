@@ -19,9 +19,10 @@ public class TestDummies {
 	public static final GameId DUMMY_GAME_ID = new GameId();
 	public static final DeliveryMethodId DUMMY_DELIVERY_METHOD_ID = new DeliveryMethodId();
 	public static final Product DUMMY_PRODUCT = new Product(DUMMY_USER_ID, DUMMY_GAME_ID, DIGITAL);
-	public static final BasketDetails DUMMY_BASKET_DETAILS = new BasketDetails(ImmutableSet.of(DUMMY_PRODUCT), DUMMY_USER_ID);
+	public static final ImmutableSet<Product> DUMMY_PRODUCTS = ImmutableSet.of(DUMMY_PRODUCT);
+	public static final BasketDetails DUMMY_BASKET_DETAILS = new BasketDetails(DUMMY_PRODUCTS, DUMMY_USER_ID);
 	public static final PaymentMethodId DUMMY_PAYMENT_METHOD_ID = new PaymentMethodId();
-	public static final Offer DUMMY_OFFER = new Offer(DUMMY_USER_ID, ImmutableSet.of(DUMMY_PRODUCT), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
+	public static final Offer DUMMY_OFFER = new Offer(DUMMY_USER_ID, DUMMY_PRODUCTS, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
 	public static final OfferId DUMMY_OFFER_ID = DUMMY_OFFER.id();
 	public static final Purchase DUMMY_PURCHASE = new Purchase(DUMMY_OFFER);
 }
