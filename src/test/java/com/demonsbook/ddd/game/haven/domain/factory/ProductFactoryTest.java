@@ -38,7 +38,7 @@ public class ProductFactoryTest {
 
 	@Test
 	public void shouldCreateAProductFromGameForUser() throws ProductAlreadyPurchasedException {
-		Product product = productFactory.createFor(user.id(), game.id(), DIGITAL);
+		Product product = productFactory.aProduct().forUser(user.id()).forGame(game.id()).inVersion(DIGITAL).create();
 
 		assertThat(product).isNotNull();
 		assertThat(product.userId()).isSameAs(user.id());
@@ -49,7 +49,7 @@ public class ProductFactoryTest {
 	public void shouldThrowAnExceptionIfTargetGameDoesNotHaveARequiredPhysicalCopyAvailable() {
 		game.physicalVersionIsNotAvailable();
 
-		assertThatThrownBy(() -> productFactory.createFor(user.id(), game.id(), DIGITAL_AND_PHYSICAL))
+		assertThatThrownBy(() -> productFactory.aProduct().forUser(user.id()).forGame(game.id()).inVersion(DIGITAL_AND_PHYSICAL).create())
 				.isInstanceOf(PhysicalVersionNotAvaliableExeption.class)
 				.hasMessage(String.format("Physical copy not available for game %s", game.id()));
 	}
@@ -58,9 +58,36 @@ public class ProductFactoryTest {
 	public void shouldThrowAnExceptionIfTargetUserAlreadyHaveTheProduct() {
 		user.addGameToLibrary(game.id());
 
-		assertThatThrownBy(() -> productFactory.createFor(user.id(), game.id(), DIGITAL))
+		assertThatThrownBy(() -> productFactory.aProduct().forUser(user.id()).forGame(game.id()).inVersion(DIGITAL).create())
 				.isInstanceOf(ProductAlreadyPurchasedException.class)
 				.hasMessage(String.format("User %s already has the game %s in his library", user.id(), game.id()));
+	}
+
+	@Test
+	public void shouldThrowAnExceptionIfNoGameIsSpecified() {
+		user.addGameToLibrary(game.id());
+
+		assertThatThrownBy(() -> productFactory.aProduct().forUser(user.id()).inVersion(DIGITAL).create())
+				.isInstanceOf(IllegalStateException.class)
+				.hasMessage("Creation of Product without a proper GameId is not allowed");
+	}
+
+	@Test
+	public void shouldThrowAnExceptionIfNoTargetUserIsSpecified() {
+		user.addGameToLibrary(game.id());
+
+		assertThatThrownBy(() -> productFactory.aProduct().forGame(game.id()).inVersion(DIGITAL).create())
+				.isInstanceOf(IllegalStateException.class)
+				.hasMessage("Creation of Product without a proper UserId is not allowed");
+	}
+
+	@Test
+	public void shouldThrowAnExceptionIfNoProductVersionIsSpecified() {
+		user.addGameToLibrary(game.id());
+
+		assertThatThrownBy(() -> productFactory.aProduct().forUser(user.id()).forGame(game.id()).create())
+				.isInstanceOf(IllegalStateException.class)
+				.hasMessage("Creation of Product without a proper Version selected is not allowed");
 	}
 
 }

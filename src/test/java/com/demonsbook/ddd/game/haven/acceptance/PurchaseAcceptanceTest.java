@@ -58,7 +58,7 @@ public class PurchaseAcceptanceTest {
 	public void shouldBeAbleToBuyAProduct() throws ProductAlreadyPurchasedException {
 		GameId gameId = givenAGameInTheCatalog();
 		UserId userId = givenANewUser();
-		Product product = productFactory.createFor(userId, gameId, DIGITAL);
+		Product product = productFactory.aProduct().forGame(gameId).forUser(userId).inVersion(DIGITAL).create();
 
 		whenUserAddsAProductToHisBasket(userId, product);
 		whenUserGeneratesAndAcceptsTheOffer(userId);
@@ -71,7 +71,7 @@ public class PurchaseAcceptanceTest {
 	public void shouldBeAbleToBuyADigitalAndPhysicalCopyOfTheProduct() throws ProductAlreadyPurchasedException {
 		GameId gameId = givenAGameWithPhysicalVersionInTheCatalog();
 		UserId userId = givenANewUser();
-		Product product = productFactory.createFor(userId, gameId, DIGITAL_AND_PHYSICAL);
+		Product product = productFactory.aProduct().forGame(gameId).forUser(userId).inVersion(DIGITAL_AND_PHYSICAL).create();
 
 		whenUserAddsAProductToHisBasket(userId, product);
 		whenUserGeneratesAndAcceptsTheOffer(userId);
@@ -89,7 +89,7 @@ public class PurchaseAcceptanceTest {
 		GameId gameId = givenAGameInTheCatalog();
 		UserId userId = givenANewUser();
 		UserId otherUserId = givenANewUser();
-		Product product = productFactory.createFor(otherUserId, gameId, DIGITAL);
+		Product product = productFactory.aProduct().forGame(gameId).forUser(otherUserId).inVersion(DIGITAL).create();
 
 		whenUserAddsAProductToHisBasket(userId, product);
 		whenUserGeneratesAndAcceptsTheOffer(userId);
@@ -103,13 +103,15 @@ public class PurchaseAcceptanceTest {
 	public void shouldNotBeAbleToGenerateAProductIfItHadBeenAlreadyPurchased() throws ProductAlreadyPurchasedException {
 		GameId gameId = givenAGameInTheCatalog();
 		UserId userId = givenANewUser();
-		Product product = productFactory.createFor(userId, gameId, DIGITAL);
+		Product product = productFactory.aProduct().forGame(gameId).forUser(userId).inVersion(DIGITAL).create();
 
 		whenUserAddsAProductToHisBasket(userId, product);
 		whenUserGeneratesAndAcceptsTheOffer(userId);
 		whenPurchaseGetsConfirmed(userId);
 
-		assertThatThrownBy(() -> productFactory.createFor(userId, gameId, DIGITAL)).isInstanceOf(ProductAlreadyPurchasedException.class);
+		assertThatThrownBy(
+				() -> productFactory.aProduct().forGame(gameId).forUser(userId).inVersion(DIGITAL).create()
+		).isInstanceOf(ProductAlreadyPurchasedException.class);
 	}
 
 	private UserId givenANewUser() {

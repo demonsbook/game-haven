@@ -20,7 +20,7 @@ public class ProductFactory {
 	@Autowired private UserRepository userRepository;
 	@Autowired private GameRepository gameRepository;
 
-	public Product createFor(UserId userId, GameId gameId, Product.Version version) throws ProductAlreadyPurchasedException {
+	private Product createFor(UserId userId, GameId gameId, Product.Version version) throws ProductAlreadyPurchasedException {
 		User user = userRepository.getForId(userId);
 		Game game = gameRepository.getForId(gameId);
 
@@ -42,6 +42,48 @@ public class ProductFactory {
 	private void verifyProductHasNotBeenAlreadyPurchased(User user, Game game) throws ProductAlreadyPurchasedException {
 		if (user.owns(game.id())) {
 			throw new ProductAlreadyPurchasedException(user.id(), game.id());
+		}
+	}
+
+	public ProductBuilder aProduct() {
+		return new ProductBuilder();
+	}
+
+	public class ProductBuilder {
+		private UserId userId;
+		private GameId gameId;
+		private Product.Version version;
+
+		public ProductBuilder forGame(GameId gameId) {
+			this.gameId = gameId;
+			return this;
+		}
+
+		public ProductBuilder forUser(UserId userId) {
+			this.userId = userId;
+			return this;
+		}
+
+		public ProductBuilder inVersion(Product.Version version) {
+			this.version = version;
+			return this;
+		}
+
+		public Product create() throws ProductAlreadyPurchasedException {
+			verifyAllRequiredArgumentsArePresent();
+			return createFor(userId, gameId, version);
+		}
+
+		private void verifyAllRequiredArgumentsArePresent() {
+			if (gameId == null) {
+				throw new IllegalStateException("Creation of Product without a proper GameId is not allowed");
+			}
+			if (userId == null) {
+				throw new IllegalStateException("Creation of Product without a proper UserId is not allowed");
+			}
+			if (version == null) {
+				throw new IllegalStateException("Creation of Product without a proper Version selected is not allowed");
+			}
 		}
 	}
 }
