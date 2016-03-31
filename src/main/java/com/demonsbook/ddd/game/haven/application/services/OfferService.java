@@ -14,6 +14,10 @@ import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
 @Service
 public class OfferService {
 
@@ -22,10 +26,13 @@ public class OfferService {
 	@Autowired private OfferRepository offerRepository;
 	@Autowired private DomainEventPublisher eventPublisher;
 
-	public OfferDetails generateOfferFor(UserId userId, DeliveryMethodId deliveryMethodId, PaymentMethodId paymentMethodId) {
+	public void generateOfferFor(UserId userId, DeliveryMethodId deliveryMethodId, PaymentMethodId paymentMethodId) {
 		Offer offer = offerFactory.createFor(userId, deliveryMethodId, paymentMethodId);
 		offerRepository.save(offer);
-		return offer.getDetails();
+	}
+
+	public List<OfferDetails> getOffersFor(UserId userId) {
+		return offerRepository.getAll().stream().filter(offer -> offer.userId().equals(userId)).map(Offer::getDetails).collect(toList());
 	}
 
 	public void acceptOffer(OfferId offerId) {

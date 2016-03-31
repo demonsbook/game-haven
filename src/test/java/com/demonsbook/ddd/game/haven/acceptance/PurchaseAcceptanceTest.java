@@ -58,13 +58,11 @@ public class PurchaseAcceptanceTest {
 	public void shouldBeAbleToBuyAProduct() throws ProductAlreadyPurchasedException {
 		GameId gameId = givenAGameInTheCatalog();
 		UserId userId = givenANewUser();
-
 		Product product = productFactory.createFor(userId, gameId, DIGITAL);
-		purchaseService.addProductToUsersBasket(userId, product);
-		OfferDetails offerDetails = offerService.generateOfferFor(userId, deliveryMethodId, paymentMethodId);
-		offerService.acceptOffer(offerDetails.offerId());
-		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
-		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
+
+		whenUserAddsAProductToHisBasket(userId, product);
+		whenUserGeneratesAndAcceptsTheOffer(userId);
+		whenPurchaseGetsConfirmed(userId);
 
 		assertThat(purchaseService.getUserDetails(userId).getGames()).contains(gameId);
 	}
@@ -73,15 +71,17 @@ public class PurchaseAcceptanceTest {
 	public void shouldBeAbleToBuyADigitalAndPhysicalCopyOfTheProduct() throws ProductAlreadyPurchasedException {
 		GameId gameId = givenAGameWithPhysicalVersionInTheCatalog();
 		UserId userId = givenANewUser();
-
 		Product product = productFactory.createFor(userId, gameId, DIGITAL_AND_PHYSICAL);
-		purchaseService.addProductToUsersBasket(userId, product);
-		OfferDetails offerDetails = offerService.generateOfferFor(userId, deliveryMethodId, paymentMethodId);
-		offerService.acceptOffer(offerDetails.offerId());
-		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
-		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
+
+		whenUserAddsAProductToHisBasket(userId, product);
+		whenUserGeneratesAndAcceptsTheOffer(userId);
+		whenPurchaseGetsConfirmed(userId);
 
 		assertThat(purchaseService.getUserDetails(userId).getGames()).contains(gameId);
+	}
+
+	private void whenUserAddsAProductToHisBasket(UserId userId, Product product) {
+		purchaseService.addProductToUsersBasket(userId, product);
 	}
 
 	@Test
@@ -89,13 +89,11 @@ public class PurchaseAcceptanceTest {
 		GameId gameId = givenAGameInTheCatalog();
 		UserId userId = givenANewUser();
 		UserId otherUserId = givenANewUser();
-
 		Product product = productFactory.createFor(otherUserId, gameId, DIGITAL);
-		purchaseService.addProductToUsersBasket(userId, product);
-		OfferDetails offerDetails = offerService.generateOfferFor(userId,deliveryMethodId,  paymentMethodId);
-		offerService.acceptOffer(offerDetails.offerId());
-		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
-		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
+
+		whenUserAddsAProductToHisBasket(userId, product);
+		whenUserGeneratesAndAcceptsTheOffer(userId);
+		whenPurchaseGetsConfirmed(userId);
 
 		assertThat(purchaseService.getUserDetails(otherUserId).getGames()).contains(gameId);
 		assertThat(purchaseService.getUserDetails(userId).getGames()).doesNotContain(gameId);
@@ -106,11 +104,10 @@ public class PurchaseAcceptanceTest {
 		GameId gameId = givenAGameInTheCatalog();
 		UserId userId = givenANewUser();
 		Product product = productFactory.createFor(userId, gameId, DIGITAL);
-		purchaseService.addProductToUsersBasket(userId, product);
-		OfferDetails offerDetails = offerService.generateOfferFor(userId, deliveryMethodId, paymentMethodId);
-		offerService.acceptOffer(offerDetails.offerId());
-		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
-		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
+
+		whenUserAddsAProductToHisBasket(userId, product);
+		whenUserGeneratesAndAcceptsTheOffer(userId);
+		whenPurchaseGetsConfirmed(userId);
 
 		assertThatThrownBy(() -> productFactory.createFor(userId, gameId, DIGITAL)).isInstanceOf(ProductAlreadyPurchasedException.class);
 	}
@@ -144,5 +141,16 @@ public class PurchaseAcceptanceTest {
 		PaymentMethod paymentMethod = new PaymentMethod();
 		paymentMethodRepository.save(paymentMethod);
 		return paymentMethod.id();
+	}
+
+	private void whenPurchaseGetsConfirmed(UserId userId) {
+		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
+		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
+	}
+
+	private void whenUserGeneratesAndAcceptsTheOffer(UserId userId) {
+		offerService.generateOfferFor(userId, deliveryMethodId, paymentMethodId);
+		OfferDetails offerDetails = getOnlyElement(offerService.getOffersFor(userId));
+		offerService.acceptOffer(offerDetails.offerId());
 	}
 }
