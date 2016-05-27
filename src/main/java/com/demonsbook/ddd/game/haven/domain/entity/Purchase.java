@@ -1,6 +1,6 @@
 package com.demonsbook.ddd.game.haven.domain.entity;
 
-import com.demonsbook.ddd.game.haven.domain.building.blocks.Entity;
+import com.demonsbook.ddd.game.haven.domain.building.blocks.Aggregate;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
@@ -11,7 +11,7 @@ import java.util.Set;
 import static com.demonsbook.ddd.game.haven.domain.entity.Purchase.Status.CONFIRMED;
 import static com.demonsbook.ddd.game.haven.domain.entity.Purchase.Status.NEW;
 
-public class Purchase extends Entity<PurchaseId> {
+public class Purchase extends Aggregate<PurchaseId> {
 
 	private Status status = NEW;
 	private UserId userId;

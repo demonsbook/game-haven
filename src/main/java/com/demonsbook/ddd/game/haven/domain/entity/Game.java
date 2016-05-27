@@ -1,6 +1,6 @@
 package com.demonsbook.ddd.game.haven.domain.entity;
 
-import com.demonsbook.ddd.game.haven.domain.building.blocks.Entity;
+import com.demonsbook.ddd.game.haven.domain.building.blocks.Aggregate;
 import com.demonsbook.ddd.game.haven.domain.util.Money;
 import com.demonsbook.ddd.game.haven.domain.value.object.GameId;
 
@@ -8,7 +8,7 @@ import java.util.Currency;
 
 import static java.math.BigDecimal.ZERO;
 
-public class Game extends Entity<GameId> {
+public class Game extends Aggregate<GameId> {
 
 	private Money price = new Money(ZERO, Currency.getInstance("PLN"));
 	private boolean hasAPhysicalVersion = false;
@@ -17,7 +17,7 @@ public class Game extends Entity<GameId> {
 		super(new GameId());
 	}
 
-	public void setPriceTo(Money price) {
+	void setPriceTo(Money price) {
 		this.price = price;
 	}
 
@@ -33,7 +33,7 @@ public class Game extends Entity<GameId> {
 		return hasAPhysicalVersion;
 	}
 
-	public Money price() {
+	Money price() {
 		return price;
 	}
 }

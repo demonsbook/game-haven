@@ -1,6 +1,6 @@
 package com.demonsbook.ddd.game.haven.domain.entity;
 
-import com.demonsbook.ddd.game.haven.domain.building.blocks.Entity;
+import com.demonsbook.ddd.game.haven.domain.building.blocks.Aggregate;
 import com.demonsbook.ddd.game.haven.domain.value.object.DeliveryMethodId;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferId;
@@ -15,7 +15,7 @@ import static com.demonsbook.ddd.game.haven.domain.entity.Offer.Status.ACCEPTED;
 import static com.demonsbook.ddd.game.haven.domain.entity.Offer.Status.DISCARDED;
 import static com.demonsbook.ddd.game.haven.domain.entity.Offer.Status.NEW;
 
-public class Offer extends Entity<OfferId> {
+public class Offer extends Aggregate<OfferId> {
 
 	private Status status = NEW;
 	private UserId userId;

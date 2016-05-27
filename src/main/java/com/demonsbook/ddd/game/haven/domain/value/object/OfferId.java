@@ -1,10 +1,10 @@
 package com.demonsbook.ddd.game.haven.domain.value.object;
 
-import com.demonsbook.ddd.game.haven.domain.building.blocks.EntityId;
+import com.demonsbook.ddd.game.haven.domain.building.blocks.AggregateId;
 
 import java.util.UUID;
 
-public final class OfferId extends EntityId {
+public final class OfferId extends AggregateId {
 	public OfferId() {
 	}
 

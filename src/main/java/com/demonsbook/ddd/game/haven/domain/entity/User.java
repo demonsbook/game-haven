@@ -1,21 +1,18 @@
 package com.demonsbook.ddd.game.haven.domain.entity;
 
-import com.demonsbook.ddd.game.haven.domain.building.blocks.Entity;
-import com.demonsbook.ddd.game.haven.domain.exception.ProductAlreadyInTheBasketException;
+import com.demonsbook.ddd.game.haven.domain.building.blocks.Aggregate;
 import com.demonsbook.ddd.game.haven.domain.value.object.BasketDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.GameId;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public class User extends Entity<UserId> {
+public class User extends Aggregate<UserId> {
 
-	Set<GameId> library = new HashSet<>();
+	private Set<GameId> library = new HashSet<>();
 	private Basket basket = new Basket();
 
 	public User() {
