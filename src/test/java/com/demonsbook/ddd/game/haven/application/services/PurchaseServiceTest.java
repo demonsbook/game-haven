@@ -25,6 +25,7 @@ import static com.demonsbook.ddd.game.haven.domain.repository.PurchaseSearchCrit
 import static com.demonsbook.ddd.game.haven.domain.value.object.Product.Version.DIGITAL;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_DELIVERY_METHOD_ID;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PAYMENT_METHOD_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PRICE;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PURCHASE;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,7 +39,7 @@ public class PurchaseServiceTest {
 	private User user = new User();
 	private Game game = new Game();
 	private Product product = new Product(user.id(), game.id(), ANY_VERSION);
-	private Offer offer = new Offer(user.id(), ImmutableSet.of(product), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
+	private Offer offer = new Offer(user.id(), ImmutableSet.of(product), DUMMY_PRICE, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
 	private Purchase purchase = new Purchase(offer);
 
 	@Mock private UserRepository userRepository;

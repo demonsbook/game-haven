@@ -12,6 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_BASKET_DETAILS;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_DELIVERY_METHOD_ID;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PAYMENT_METHOD_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PRICE;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -21,12 +22,14 @@ public class OfferFactoryTest {
 
 	@Mock private User user;
 	@Mock private UserRepository userRepository;
+	@Mock private PricingService pricingService;
 
 	@InjectMocks private OfferFactory offerFactory;
 
 	@Test
 	public void shouldGenerateOfferForUser() {
 		given(userRepository.getForId(DUMMY_USER_ID)).willReturn(user);
+		given(pricingService.calculatePriceFor(DUMMY_BASKET_DETAILS.getProducts())).willReturn(DUMMY_PRICE);
 		given(user.getBasketDetails()).willReturn(DUMMY_BASKET_DETAILS);
 
 		Offer offer = offerFactory.createFor(DUMMY_USER_ID, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);

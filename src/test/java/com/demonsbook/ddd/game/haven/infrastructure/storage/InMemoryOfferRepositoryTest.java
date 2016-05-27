@@ -11,6 +11,7 @@ import static com.demonsbook.ddd.game.haven.domain.repository.OfferSearchCriteri
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_DELIVERY_METHOD_ID;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_OFFER;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PAYMENT_METHOD_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PRICE;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,7 +22,7 @@ public class InMemoryOfferRepositoryTest {
 	@Test
 	public void shouldReturnOnlyTheOffersMatchingSearchCriteria() {
 		repository.save(DUMMY_OFFER);
-		repository.save(new Offer(new UserId(), Collections.emptySet(), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID));
+		repository.save(new Offer(new UserId(), Collections.emptySet(), DUMMY_PRICE, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID));
 
 		Collection<Offer> allMatching = repository.getAllMatching(anOfferSearchCriteria().forUser(DUMMY_USER_ID).build());
 

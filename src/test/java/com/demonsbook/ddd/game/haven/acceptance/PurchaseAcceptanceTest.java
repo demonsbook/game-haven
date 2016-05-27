@@ -1,5 +1,6 @@
 package com.demonsbook.ddd.game.haven.acceptance;
 
+import com.demonsbook.ddd.game.haven.application.services.PaymentService;
 import com.demonsbook.ddd.game.haven.application.services.OfferService;
 import com.demonsbook.ddd.game.haven.application.services.PurchaseService;
 import com.demonsbook.ddd.game.haven.config.GameHavenConfig;
@@ -43,6 +44,7 @@ public class PurchaseAcceptanceTest {
 	@Autowired private PaymentMethodRepository paymentMethodRepository;
 	@Autowired private ProductFactory productFactory;
 	@Autowired private PurchaseService purchaseService;
+	@Autowired private PaymentService paymentService;
 	@Autowired private OfferService offerService;
 
 	private DeliveryMethodId deliveryMethodId;
@@ -62,7 +64,7 @@ public class PurchaseAcceptanceTest {
 
 		whenUserAddsAProductToHisBasket(userId, product);
 		whenUserGeneratesAndAcceptsTheOffer(userId);
-		whenPurchaseGetsConfirmed(userId);
+		whenPaymentIsMade(userId);
 
 		assertThat(purchaseService.getUserDetails(userId).getGames()).contains(gameId);
 	}
@@ -75,7 +77,7 @@ public class PurchaseAcceptanceTest {
 
 		whenUserAddsAProductToHisBasket(userId, product);
 		whenUserGeneratesAndAcceptsTheOffer(userId);
-		whenPurchaseGetsConfirmed(userId);
+		whenPaymentIsMade(userId);
 
 		assertThat(purchaseService.getUserDetails(userId).getGames()).contains(gameId);
 	}
@@ -93,7 +95,7 @@ public class PurchaseAcceptanceTest {
 
 		whenUserAddsAProductToHisBasket(userId, product);
 		whenUserGeneratesAndAcceptsTheOffer(userId);
-		whenPurchaseGetsConfirmed(userId);
+		whenPaymentIsMade(userId);
 
 		assertThat(purchaseService.getUserDetails(otherUserId).getGames()).contains(gameId);
 		assertThat(purchaseService.getUserDetails(userId).getGames()).doesNotContain(gameId);
@@ -107,11 +109,24 @@ public class PurchaseAcceptanceTest {
 
 		whenUserAddsAProductToHisBasket(userId, product);
 		whenUserGeneratesAndAcceptsTheOffer(userId);
-		whenPurchaseGetsConfirmed(userId);
+		whenPaymentIsMade(userId);
 
 		assertThatThrownBy(
 				() -> productFactory.aProduct().forGame(gameId).forUser(userId).inVersion(DIGITAL).create()
 		).isInstanceOf(ProductAlreadyPurchasedException.class);
+	}
+
+	@Test
+	public void shouldSetUpAPaymentWhenPurchaseIsGenerated() throws ProductAlreadyPurchasedException {
+		GameId gameId = givenAGameInTheCatalog();
+		UserId userId = givenANewUser();
+		Product product = productFactory.aProduct().forGame(gameId).forUser(userId).inVersion(DIGITAL).create();
+
+		whenUserAddsAProductToHisBasket(userId, product);
+		whenUserGeneratesAndAcceptsTheOffer(userId);
+
+		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
+		assertThat(paymentService.isPaymentOpen(purchaseDetails.purchaseId())).isTrue();
 	}
 
 	private UserId givenANewUser() {
@@ -145,9 +160,9 @@ public class PurchaseAcceptanceTest {
 		return paymentMethod.id();
 	}
 
-	private void whenPurchaseGetsConfirmed(UserId userId) {
+	private void whenPaymentIsMade(UserId userId) {
 		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
-		purchaseService.confirmPurchase(purchaseDetails.purchaseId());
+		paymentService.payFor(purchaseDetails.purchaseId());
 	}
 
 	private void whenUserGeneratesAndAcceptsTheOffer(UserId userId) {

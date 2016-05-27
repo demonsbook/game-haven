@@ -6,6 +6,7 @@ import com.demonsbook.ddd.game.haven.domain.building.blocks.DomainEventPublisher
 import com.demonsbook.ddd.game.haven.domain.entity.Offer;
 import com.demonsbook.ddd.game.haven.domain.entity.Purchase;
 import com.demonsbook.ddd.game.haven.domain.event.OfferAccepted;
+import com.demonsbook.ddd.game.haven.domain.event.PurchaseCreated;
 import com.demonsbook.ddd.game.haven.domain.factory.PurchaseFactory;
 import com.demonsbook.ddd.game.haven.domain.repository.OfferRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.PurchaseRepository;
@@ -26,14 +27,16 @@ class OfferStatusService extends DomainEventListener {
 
 	@PostConstruct
 	void subscribeToEvent() {
-		subscribeTo(this::offerAcceptedEventPredicate, this::handleEvent);
+		subscribeTo(this::offerAcceptedEventPredicate, this::generatePurchase);
 	}
 
-	private void handleEvent(DomainEvent event) {
+	private void generatePurchase(DomainEvent event) {
 		Offer offer = offerRepository.getForId(((OfferAccepted) event).offerId());
 
 		Purchase purchase = purchaseFactory.createFor(offer);
 		purchaseRepository.save(purchase);
+
+		eventPublisher.publish(new PurchaseCreated(purchase.id()));
 	}
 
 	private boolean offerAcceptedEventPredicate(DomainEvent event) {

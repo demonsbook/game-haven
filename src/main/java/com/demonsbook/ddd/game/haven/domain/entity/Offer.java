@@ -1,6 +1,7 @@
 package com.demonsbook.ddd.game.haven.domain.entity;
 
 import com.demonsbook.ddd.game.haven.domain.building.blocks.Aggregate;
+import com.demonsbook.ddd.game.haven.domain.util.Money;
 import com.demonsbook.ddd.game.haven.domain.value.object.DeliveryMethodId;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferId;
@@ -20,13 +21,15 @@ public class Offer extends Aggregate<OfferId> {
 	private Status status = NEW;
 	private UserId userId;
 	private Set<Product> products;
+	private Money price;
 	private DeliveryMethodId deliveryMethodId;
 	private PaymentMethodId paymentMethodId;
 
-	public Offer(UserId userId, Set<Product> products, DeliveryMethodId deliveryMethodId, PaymentMethodId paymentMethodId) {
+	public Offer(UserId userId, Set<Product> products, Money price, DeliveryMethodId deliveryMethodId, PaymentMethodId paymentMethodId) {
 		super(new OfferId());
 		this.userId = userId;
 		this.products = ImmutableSet.copyOf(products);
+		this.price = price;
 		this.deliveryMethodId = deliveryMethodId;
 		this.paymentMethodId = paymentMethodId;
 	}
@@ -65,6 +68,10 @@ public class Offer extends Aggregate<OfferId> {
 
 	public PaymentMethodId paymentMethodId() {
 		return paymentMethodId;
+	}
+
+	public Money price() {
+		return price;
 	}
 
 	public enum Status {

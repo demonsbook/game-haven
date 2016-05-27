@@ -9,6 +9,7 @@ import static com.demonsbook.ddd.game.haven.domain.entity.Offer.Status.DISCARDED
 import static com.demonsbook.ddd.game.haven.domain.entity.Offer.Status.NEW;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_DELIVERY_METHOD_ID;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PAYMENT_METHOD_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PRICE;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PRODUCT;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PRODUCTS;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_USER_ID;
@@ -16,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class OfferTest {
 
-	private Offer offer = new Offer(DUMMY_USER_ID, DUMMY_PRODUCTS, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
+	private Offer offer = new Offer(DUMMY_USER_ID, DUMMY_PRODUCTS, DUMMY_PRICE, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
 
 	@Test
 	public void shouldBeAValidEntity() {

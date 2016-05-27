@@ -1,6 +1,7 @@
 package com.demonsbook.ddd.game.haven.domain.entity;
 
 import com.demonsbook.ddd.game.haven.domain.building.blocks.Aggregate;
+import com.demonsbook.ddd.game.haven.domain.util.Money;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
@@ -15,12 +16,14 @@ public class Purchase extends Aggregate<PurchaseId> {
 
 	private Status status = NEW;
 	private UserId userId;
+	private Money price;
 	private Set<Product> products;
 
 	public Purchase(Offer offer) {
 		super(new PurchaseId());
 		this.userId = offer.userId();
 		this.products = offer.products();
+		this.price = offer.price();
 	}
 
 	protected Purchase(PurchaseId id) {
@@ -45,6 +48,10 @@ public class Purchase extends Aggregate<PurchaseId> {
 
 	public Set<Product> products() {
 		return ImmutableSet.copyOf(products);
+	}
+
+	public Money price() {
+		return price;
 	}
 
 	public enum Status {
