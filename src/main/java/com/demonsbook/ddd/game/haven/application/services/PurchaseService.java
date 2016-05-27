@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
+import static com.demonsbook.ddd.game.haven.domain.repository.PurchaseSearchCriteria.aPurchaseSearchCriteria;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -42,7 +43,7 @@ public class PurchaseService {
 	}
 
 	public Collection<PurchaseDetails> getPurchasesOfUser(UserId userId) {
-		Collection<Purchase> purchases = purchaseRepository.getAll();
-		return purchases.stream().filter(purchase -> purchase.userId().equals(userId)).map(Purchase::getDetails).collect(toList());
+		Collection<Purchase> purchases = purchaseRepository.getAllMatching(aPurchaseSearchCriteria().forUser(userId).build());
+		return purchases.stream().map(Purchase::getDetails).collect(toList());
 	}
 }

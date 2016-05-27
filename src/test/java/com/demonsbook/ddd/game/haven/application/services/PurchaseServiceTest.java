@@ -9,7 +9,9 @@ import com.demonsbook.ddd.game.haven.domain.entity.User;
 import com.demonsbook.ddd.game.haven.domain.repository.PurchaseRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
+import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.UserDetails;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,9 +19,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Collection;
+
+import static com.demonsbook.ddd.game.haven.domain.repository.PurchaseSearchCriteria.aPurchaseSearchCriteria;
 import static com.demonsbook.ddd.game.haven.domain.value.object.Product.Version.DIGITAL;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_DELIVERY_METHOD_ID;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PAYMENT_METHOD_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PURCHASE;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -64,6 +71,15 @@ public class PurchaseServiceTest {
 		UserDetails userDetails = purchaseService.getUserDetails(user.id());
 
 		assertThat(userDetails).isNotNull();
+	}
+
+	@Test
+	public void shouldGiveDetailsOfAllPurchasesOfAGivenUser() {
+		given(purchaseRepository.getAllMatching(aPurchaseSearchCriteria().forUser(DUMMY_USER_ID).build())).willReturn(ImmutableList.of(DUMMY_PURCHASE));
+
+		Collection<PurchaseDetails> purchaseDetails = purchaseService.getPurchasesOfUser(DUMMY_USER_ID);
+
+		assertThat(purchaseDetails).containsOnly(DUMMY_PURCHASE.getDetails());
 	}
 
 }

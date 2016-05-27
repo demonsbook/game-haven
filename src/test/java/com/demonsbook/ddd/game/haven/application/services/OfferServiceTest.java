@@ -4,11 +4,13 @@ import com.demonsbook.ddd.game.haven.domain.building.blocks.DomainEventPublisher
 import com.demonsbook.ddd.game.haven.domain.entity.Offer;
 import com.demonsbook.ddd.game.haven.domain.factory.OfferFactory;
 import com.demonsbook.ddd.game.haven.domain.repository.OfferRepository;
+import com.demonsbook.ddd.game.haven.domain.repository.OfferSearchCriteria;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
-import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -16,12 +18,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.List;
 
 import static com.demonsbook.ddd.game.haven.domain.entity.Offer.Status.ACCEPTED;
+import static com.demonsbook.ddd.game.haven.domain.repository.OfferSearchCriteria.anOfferSearchCriteria;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_DELIVERY_METHOD_ID;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_OFFER;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PAYMENT_METHOD_ID;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PRODUCTS;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_USER_ID;
-import static java.util.Collections.emptySet;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -32,6 +34,9 @@ public class OfferServiceTest {
 	@Mock private OfferFactory offerFactory;
 	@Mock private OfferRepository offerRepository;
 	@Mock private DomainEventPublisher domainEventPublisher;
+
+	@Captor ArgumentCaptor<OfferSearchCriteria> searchCriteriaCaptor;
+
 	@InjectMocks private OfferService offerService;
 
 	@Test
@@ -44,7 +49,7 @@ public class OfferServiceTest {
 
 	@Test
 	public void shouldGiveDetailsOfAllOffersForAGivenUser() {
-		given(offerRepository.getAll()).willReturn(ImmutableList.of(DUMMY_OFFER, new Offer(new UserId(), emptySet(), DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID)));
+		given(offerRepository.getAllMatching(anOfferSearchCriteria().forUser(DUMMY_USER_ID).build())).willReturn(ImmutableList.of(DUMMY_OFFER));
 
 		List<OfferDetails> offerDetails = offerService.getOffersFor(DUMMY_USER_ID);
 

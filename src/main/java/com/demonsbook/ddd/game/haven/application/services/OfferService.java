@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.demonsbook.ddd.game.haven.domain.repository.OfferSearchCriteria.anOfferSearchCriteria;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -32,7 +33,8 @@ public class OfferService {
 	}
 
 	public List<OfferDetails> getOffersFor(UserId userId) {
-		return offerRepository.getAll().stream().filter(offer -> offer.userId().equals(userId)).map(Offer::getDetails).collect(toList());
+		return offerRepository.getAllMatching(anOfferSearchCriteria().forUser(userId).build())
+				.stream().map(Offer::getDetails).collect(toList());
 	}
 
 	public void acceptOffer(OfferId offerId) {
