@@ -2,8 +2,8 @@ package com.demonsbook.ddd.game.haven.infrastructure.services;
 
 import com.demonsbook.ddd.game.haven.application.services.PaymentService;
 import com.demonsbook.ddd.game.haven.domain.building.blocks.DomainEventPublisher;
-import com.demonsbook.ddd.game.haven.domain.entity.PurchaseId;
 import com.demonsbook.ddd.game.haven.domain.event.PaymentCompleted;
+import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

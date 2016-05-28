@@ -8,9 +8,9 @@ import com.demonsbook.ddd.game.haven.domain.entity.Purchase;
 import com.demonsbook.ddd.game.haven.domain.event.OfferAccepted;
 import com.demonsbook.ddd.game.haven.domain.event.PurchaseCreated;
 import com.demonsbook.ddd.game.haven.domain.factory.PurchaseFactory;
+import com.demonsbook.ddd.game.haven.domain.repository.ClientRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.OfferRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.PurchaseRepository;
-import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ import javax.annotation.PostConstruct;
 @Service
 class OfferStatusService extends DomainEventListener {
 
-	@Autowired private UserRepository userRepository;
+	@Autowired private ClientRepository clientRepository;
 	@Autowired private OfferRepository offerRepository;
 	@Autowired private DomainEventPublisher eventPublisher;
 	@Autowired private PurchaseFactory purchaseFactory;

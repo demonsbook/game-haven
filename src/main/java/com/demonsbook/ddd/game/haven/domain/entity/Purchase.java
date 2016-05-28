@@ -1,10 +1,11 @@
 package com.demonsbook.ddd.game.haven.domain.entity;
 
 import com.demonsbook.ddd.game.haven.domain.building.blocks.Aggregate;
-import com.demonsbook.ddd.game.haven.domain.util.Money;
+import com.demonsbook.ddd.game.haven.domain.value.object.ClientId;
+import com.demonsbook.ddd.game.haven.domain.value.object.Money;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseDetails;
-import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
+import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseId;
 import com.google.common.collect.ImmutableSet;
 
 import java.util.Set;
@@ -15,13 +16,13 @@ import static com.demonsbook.ddd.game.haven.domain.entity.Purchase.Status.NEW;
 public class Purchase extends Aggregate<PurchaseId> {
 
 	private Status status = NEW;
-	private UserId userId;
+	private ClientId clientId;
 	private Money price;
 	private Set<Product> products;
 
 	public Purchase(Offer offer) {
 		super(new PurchaseId());
-		this.userId = offer.userId();
+		this.clientId = offer.clientId();
 		this.products = offer.products();
 		this.price = offer.price();
 	}
@@ -42,8 +43,8 @@ public class Purchase extends Aggregate<PurchaseId> {
 		return status;
 	}
 
-	public UserId userId() {
-		return userId;
+	public ClientId clientId() {
+		return clientId;
 	}
 
 	public Set<Product> products() {

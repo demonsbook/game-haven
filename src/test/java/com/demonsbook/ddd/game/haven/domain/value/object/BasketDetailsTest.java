@@ -5,11 +5,11 @@ import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PRODUCTS;
-import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_USER_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_CLIENT_ID;
 
 public class BasketDetailsTest {
 
-	private BasketDetails basket = new BasketDetails(DUMMY_PRODUCTS, DUMMY_USER_ID);
+	private BasketDetails basket = new BasketDetails(DUMMY_PRODUCTS, DUMMY_CLIENT_ID);
 
 	@Test
 	public void shouldBeAValidValueObject() {
@@ -23,7 +23,7 @@ public class BasketDetailsTest {
 
 	@Test
 	public void shouldReturnOwnerId() {
-		Assertions.assertThat(basket.getUserId()).isEqualTo(DUMMY_USER_ID);
+		Assertions.assertThat(basket.getClientId()).isEqualTo(DUMMY_CLIENT_ID);
 	}
 
 }

@@ -1,8 +1,9 @@
 package com.demonsbook.ddd.game.haven.domain.factory;
 
 import com.demonsbook.ddd.game.haven.domain.entity.Offer;
-import com.demonsbook.ddd.game.haven.domain.entity.User;
-import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
+import com.demonsbook.ddd.game.haven.domain.entity.Client;
+import com.demonsbook.ddd.game.haven.domain.repository.ClientRepository;
+import com.demonsbook.ddd.game.haven.domain.services.PricingService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,29 +14,29 @@ import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_BASKET_DETAIL
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_DELIVERY_METHOD_ID;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PAYMENT_METHOD_ID;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PRICE;
-import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_USER_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_CLIENT_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OfferFactoryTest {
 
-	@Mock private User user;
-	@Mock private UserRepository userRepository;
+	@Mock private Client client;
+	@Mock private ClientRepository clientRepository;
 	@Mock private PricingService pricingService;
 
 	@InjectMocks private OfferFactory offerFactory;
 
 	@Test
-	public void shouldGenerateOfferForUser() {
-		given(userRepository.getForId(DUMMY_USER_ID)).willReturn(user);
+	public void shouldGenerateOfferForClient() {
+		given(clientRepository.getForId(DUMMY_CLIENT_ID)).willReturn(client);
 		given(pricingService.calculatePriceFor(DUMMY_BASKET_DETAILS.getProducts())).willReturn(DUMMY_PRICE);
-		given(user.getBasketDetails()).willReturn(DUMMY_BASKET_DETAILS);
+		given(client.getBasketDetails()).willReturn(DUMMY_BASKET_DETAILS);
 
-		Offer offer = offerFactory.createFor(DUMMY_USER_ID, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
+		Offer offer = offerFactory.createFor(DUMMY_CLIENT_ID, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
 
 		assertThat(offer).isNotNull();
-		assertThat(offer.userId()).isSameAs(DUMMY_USER_ID);
+		assertThat(offer.clientId()).isSameAs(DUMMY_CLIENT_ID);
 		assertThat(offer.products()).isSameAs(DUMMY_BASKET_DETAILS.getProducts());
 		assertThat(offer.deliveryMethodId()).isSameAs(DUMMY_DELIVERY_METHOD_ID);
 		assertThat(offer.paymentMethodId()).isSameAs(DUMMY_PAYMENT_METHOD_ID);

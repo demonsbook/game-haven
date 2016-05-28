@@ -5,12 +5,12 @@ import com.demonsbook.ddd.game.haven.domain.building.blocks.DomainEventPublisher
 import com.demonsbook.ddd.game.haven.domain.entity.Game;
 import com.demonsbook.ddd.game.haven.domain.entity.Offer;
 import com.demonsbook.ddd.game.haven.domain.entity.Purchase;
-import com.demonsbook.ddd.game.haven.domain.entity.User;
+import com.demonsbook.ddd.game.haven.domain.entity.Client;
 import com.demonsbook.ddd.game.haven.domain.repository.PurchaseRepository;
-import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
+import com.demonsbook.ddd.game.haven.domain.repository.ClientRepository;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseDetails;
-import com.demonsbook.ddd.game.haven.domain.value.object.UserDetails;
+import com.demonsbook.ddd.game.haven.domain.value.object.ClientDetails;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
@@ -27,7 +27,7 @@ import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_DELIVERY_METH
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PAYMENT_METHOD_ID;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PRICE;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PURCHASE;
-import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_USER_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_CLIENT_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -36,24 +36,24 @@ public class PurchaseServiceTest {
 
 	private static final Product.Version ANY_VERSION = DIGITAL;
 
-	private User user = new User();
+	private Client client = new Client();
 	private Game game = new Game();
-	private Product product = new Product(user.id(), game.id(), ANY_VERSION);
-	private Offer offer = new Offer(user.id(), ImmutableSet.of(product), DUMMY_PRICE, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
+	private Product product = new Product(client.id(), game.id(), ANY_VERSION);
+	private Offer offer = new Offer(client.id(), ImmutableSet.of(product), DUMMY_PRICE, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
 	private Purchase purchase = new Purchase(offer);
 
-	@Mock private UserRepository userRepository;
+	@Mock private ClientRepository clientRepository;
 	@Mock private PurchaseRepository purchaseRepository;
 	@Mock private DomainEventPublisher domainEventPublisher;
 	@InjectMocks private PurchaseService purchaseService;
 
 	@Test
 	public void shouldAddProductsToBasket() {
-		given(userRepository.getForId(user.id())).willReturn(user);
+		given(clientRepository.getForId(client.id())).willReturn(client);
 
-		purchaseService.addProductToUsersBasket(user.id(), product);
+		purchaseService.addProductToClientsBasket(client.id(), product);
 
-		assertThat(user.getBasketDetails().getProducts()).contains(product);
+		assertThat(client.getBasketDetails().getProducts()).contains(product);
 	}
 
 	@Test
@@ -66,19 +66,19 @@ public class PurchaseServiceTest {
 	}
 
 	@Test
-	public void shouldReturnUserDetails() {
-		given(userRepository.getForId(user.id())).willReturn(user);
+	public void shouldReturnClientDetails() {
+		given(clientRepository.getForId(client.id())).willReturn(client);
 
-		UserDetails userDetails = purchaseService.getUserDetails(user.id());
+		ClientDetails clientDetails = purchaseService.getClientDetails(client.id());
 
-		assertThat(userDetails).isNotNull();
+		assertThat(clientDetails).isNotNull();
 	}
 
 	@Test
-	public void shouldGiveDetailsOfAllPurchasesOfAGivenUser() {
-		given(purchaseRepository.getAllMatching(aPurchaseSearchCriteria().forUser(DUMMY_USER_ID).build())).willReturn(ImmutableList.of(DUMMY_PURCHASE));
+	public void shouldGiveDetailsOfAllPurchasesOfAGivenClient() {
+		given(purchaseRepository.getAllMatching(aPurchaseSearchCriteria().forClient(DUMMY_CLIENT_ID).build())).willReturn(ImmutableList.of(DUMMY_PURCHASE));
 
-		Collection<PurchaseDetails> purchaseDetails = purchaseService.getPurchasesOfUser(DUMMY_USER_ID);
+		Collection<PurchaseDetails> purchaseDetails = purchaseService.getPurchasesOfClient(DUMMY_CLIENT_ID);
 
 		assertThat(purchaseDetails).containsOnly(DUMMY_PURCHASE.getDetails());
 	}

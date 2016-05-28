@@ -1,4 +1,4 @@
-package com.demonsbook.ddd.game.haven.domain.util;
+package com.demonsbook.ddd.game.haven.domain.value.object;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

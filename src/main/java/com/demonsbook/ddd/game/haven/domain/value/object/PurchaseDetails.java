@@ -1,6 +1,5 @@
 package com.demonsbook.ddd.game.haven.domain.value.object;
 
-import com.demonsbook.ddd.game.haven.domain.entity.PurchaseId;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 

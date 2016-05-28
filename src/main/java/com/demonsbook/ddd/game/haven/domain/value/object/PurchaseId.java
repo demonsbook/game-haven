@@ -1,4 +1,4 @@
-package com.demonsbook.ddd.game.haven.domain.entity;
+package com.demonsbook.ddd.game.haven.domain.value.object;
 
 import com.demonsbook.ddd.game.haven.domain.building.blocks.AggregateId;
 

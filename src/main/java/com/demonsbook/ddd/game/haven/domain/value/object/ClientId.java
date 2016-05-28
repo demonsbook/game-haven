@@ -4,11 +4,11 @@ import com.demonsbook.ddd.game.haven.domain.building.blocks.AggregateId;
 
 import java.util.UUID;
 
-public final class UserId extends AggregateId {
-	public UserId() {
+public final class ClientId extends AggregateId {
+	public ClientId() {
 	}
 
-	public UserId(UUID value) {
+	public ClientId(UUID value) {
 		super(value);
 	}
 }

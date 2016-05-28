@@ -1,7 +1,6 @@
 package com.demonsbook.ddd.game.haven.domain.value.object;
 
 import com.demonsbook.ddd.game.haven.domain.assertions.ValueObjectAssert;
-import com.demonsbook.ddd.game.haven.domain.entity.PurchaseId;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 

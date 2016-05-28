@@ -5,7 +5,7 @@ import com.demonsbook.ddd.game.haven.domain.event.OfferAccepted;
 import com.demonsbook.ddd.game.haven.domain.factory.PurchaseFactory;
 import com.demonsbook.ddd.game.haven.domain.repository.OfferRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.PurchaseRepository;
-import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
+import com.demonsbook.ddd.game.haven.domain.repository.ClientRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +22,7 @@ import static org.mockito.BDDMockito.then;
 @RunWith(MockitoJUnitRunner.class)
 public class OfferStatusServiceTest {
 
-	@Mock private UserRepository userRepository;
+	@Mock private ClientRepository clientRepository;
 	@Mock private OfferRepository offerRepository;
 	@Mock private DomainEventPublisher eventPublisher;
 	@Mock private PurchaseFactory purchaseFactory;

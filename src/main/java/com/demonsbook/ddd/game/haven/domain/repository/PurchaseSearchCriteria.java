@@ -1,20 +1,20 @@
 package com.demonsbook.ddd.game.haven.domain.repository;
 
-import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
+import com.demonsbook.ddd.game.haven.domain.value.object.ClientId;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.Optional;
 
 public class PurchaseSearchCriteria {
-	private UserId userId;
+	private ClientId clientId;
 
-	private PurchaseSearchCriteria(UserId userId) {
-		this.userId = userId;
+	private PurchaseSearchCriteria(ClientId clientId) {
+		this.clientId = clientId;
 	}
 
-	public Optional<UserId> getUserId() {
-		return Optional.ofNullable(userId);
+	public Optional<ClientId> getClientId() {
+		return Optional.ofNullable(clientId);
 	}
 
 	public static PurchaseSearchCriteria.Builder aPurchaseSearchCriteria() {
@@ -22,15 +22,15 @@ public class PurchaseSearchCriteria {
 	}
 
 	public static class Builder {
-		private UserId userId;
+		private ClientId clientId;
 
-		public Builder forUser(UserId userId) {
-			this.userId = userId;
+		public Builder forClient(ClientId clientId) {
+			this.clientId = clientId;
 			return this;
 		}
 
 		public PurchaseSearchCriteria build() {
-			return new PurchaseSearchCriteria(userId);
+			return new PurchaseSearchCriteria(clientId);
 		}
 	}
 
@@ -47,14 +47,14 @@ public class PurchaseSearchCriteria {
 		PurchaseSearchCriteria that = (PurchaseSearchCriteria) other;
 
 		return new EqualsBuilder()
-				.append(userId, that.userId)
+				.append(clientId, that.clientId)
 				.isEquals();
 	}
 
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37)
-				.append(userId)
+				.append(clientId)
 				.toHashCode();
 	}
 }

@@ -1,13 +1,13 @@
 package com.demonsbook.ddd.game.haven.domain.entity;
 
 import com.demonsbook.ddd.game.haven.domain.building.blocks.Aggregate;
-import com.demonsbook.ddd.game.haven.domain.util.Money;
+import com.demonsbook.ddd.game.haven.domain.value.object.ClientId;
 import com.demonsbook.ddd.game.haven.domain.value.object.DeliveryMethodId;
+import com.demonsbook.ddd.game.haven.domain.value.object.Money;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferId;
 import com.demonsbook.ddd.game.haven.domain.value.object.PaymentMethodId;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
-import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
 import com.google.common.collect.ImmutableSet;
 
 import java.util.Set;
@@ -19,15 +19,15 @@ import static com.demonsbook.ddd.game.haven.domain.entity.Offer.Status.NEW;
 public class Offer extends Aggregate<OfferId> {
 
 	private Status status = NEW;
-	private UserId userId;
+	private ClientId clientId;
 	private Set<Product> products;
 	private Money price;
 	private DeliveryMethodId deliveryMethodId;
 	private PaymentMethodId paymentMethodId;
 
-	public Offer(UserId userId, Set<Product> products, Money price, DeliveryMethodId deliveryMethodId, PaymentMethodId paymentMethodId) {
+	public Offer(ClientId clientId, Set<Product> products, Money price, DeliveryMethodId deliveryMethodId, PaymentMethodId paymentMethodId) {
 		super(new OfferId());
-		this.userId = userId;
+		this.clientId = clientId;
 		this.products = ImmutableSet.copyOf(products);
 		this.price = price;
 		this.deliveryMethodId = deliveryMethodId;
@@ -54,8 +54,8 @@ public class Offer extends Aggregate<OfferId> {
 		return status;
 	}
 
-	public UserId userId() {
-		return userId;
+	public ClientId clientId() {
+		return clientId;
 	}
 
 	public Set<Product> products() {

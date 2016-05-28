@@ -5,12 +5,12 @@ import org.junit.Test;
 
 import static com.demonsbook.ddd.game.haven.domain.value.object.Product.Version.DIGITAL;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_GAME_ID;
-import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_USER_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_CLIENT_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductTest {
 
-	private Product product = new Product(DUMMY_USER_ID, DUMMY_GAME_ID, DIGITAL);
+	private Product product = new Product(DUMMY_CLIENT_ID, DUMMY_GAME_ID, DIGITAL);
 
 	@Test
 	public void shouldBeAValidValueObject() {
@@ -18,8 +18,8 @@ public class ProductTest {
 	}
 
 	@Test
-	public void shouldReturnTheIdOfUserForWhichTheGameIsBought() {
-		assertThat(product.userId()).isSameAs(DUMMY_USER_ID);
+	public void shouldReturnTheIdOfClientForWhichTheGameIsBought() {
+		assertThat(product.clientId()).isSameAs(DUMMY_CLIENT_ID);
 	}
 
 	@Test

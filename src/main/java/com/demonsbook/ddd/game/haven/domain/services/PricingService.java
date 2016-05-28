@@ -1,6 +1,6 @@
-package com.demonsbook.ddd.game.haven.domain.factory;
+package com.demonsbook.ddd.game.haven.domain.services;
 
-import com.demonsbook.ddd.game.haven.domain.util.Money;
+import com.demonsbook.ddd.game.haven.domain.value.object.Money;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 
 import java.util.Collection;

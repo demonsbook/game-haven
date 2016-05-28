@@ -7,20 +7,20 @@ import com.demonsbook.ddd.game.haven.config.GameHavenConfig;
 import com.demonsbook.ddd.game.haven.domain.entity.DeliveryMethod;
 import com.demonsbook.ddd.game.haven.domain.entity.Game;
 import com.demonsbook.ddd.game.haven.domain.entity.PaymentMethod;
-import com.demonsbook.ddd.game.haven.domain.entity.User;
+import com.demonsbook.ddd.game.haven.domain.entity.Client;
 import com.demonsbook.ddd.game.haven.domain.exception.ProductAlreadyPurchasedException;
 import com.demonsbook.ddd.game.haven.domain.factory.ProductFactory;
 import com.demonsbook.ddd.game.haven.domain.repository.DeliveryMethodRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.GameRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.PaymentMethodRepository;
-import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
+import com.demonsbook.ddd.game.haven.domain.repository.ClientRepository;
 import com.demonsbook.ddd.game.haven.domain.value.object.DeliveryMethodId;
 import com.demonsbook.ddd.game.haven.domain.value.object.GameId;
 import com.demonsbook.ddd.game.haven.domain.value.object.OfferDetails;
 import com.demonsbook.ddd.game.haven.domain.value.object.PaymentMethodId;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseDetails;
-import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
+import com.demonsbook.ddd.game.haven.domain.value.object.ClientId;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +39,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class PurchaseAcceptanceTest {
 
 	@Autowired private GameRepository gameRepository;
-	@Autowired private UserRepository userRepository;
+	@Autowired private ClientRepository clientRepository;
 	@Autowired private DeliveryMethodRepository deliveryMethodRepository;
 	@Autowired private PaymentMethodRepository paymentMethodRepository;
 	@Autowired private ProductFactory productFactory;
@@ -59,80 +59,80 @@ public class PurchaseAcceptanceTest {
 	@Test
 	public void shouldBeAbleToBuyAProduct() throws ProductAlreadyPurchasedException {
 		GameId gameId = givenAGameInTheCatalog();
-		UserId userId = givenANewUser();
-		Product product = productFactory.aProduct().forGame(gameId).forUser(userId).inVersion(DIGITAL).create();
+		ClientId clientId = givenANewClient();
+		Product product = productFactory.aProduct().forGame(gameId).forClient(clientId).inVersion(DIGITAL).create();
 
-		whenUserAddsAProductToHisBasket(userId, product);
-		whenUserGeneratesAndAcceptsTheOffer(userId);
-		whenPaymentIsMade(userId);
+		whenClientAddsAProductToHisBasket(clientId, product);
+		whenClientGeneratesAndAcceptsTheOffer(clientId);
+		whenPaymentIsMade(clientId);
 
-		assertThat(purchaseService.getUserDetails(userId).getGames()).contains(gameId);
+		assertThat(purchaseService.getClientDetails(clientId).getGames()).contains(gameId);
 	}
 
 	@Test
 	public void shouldBeAbleToBuyADigitalAndPhysicalCopyOfTheProduct() throws ProductAlreadyPurchasedException {
 		GameId gameId = givenAGameWithPhysicalVersionInTheCatalog();
-		UserId userId = givenANewUser();
-		Product product = productFactory.aProduct().forGame(gameId).forUser(userId).inVersion(DIGITAL_AND_PHYSICAL).create();
+		ClientId clientId = givenANewClient();
+		Product product = productFactory.aProduct().forGame(gameId).forClient(clientId).inVersion(DIGITAL_AND_PHYSICAL).create();
 
-		whenUserAddsAProductToHisBasket(userId, product);
-		whenUserGeneratesAndAcceptsTheOffer(userId);
-		whenPaymentIsMade(userId);
+		whenClientAddsAProductToHisBasket(clientId, product);
+		whenClientGeneratesAndAcceptsTheOffer(clientId);
+		whenPaymentIsMade(clientId);
 
-		assertThat(purchaseService.getUserDetails(userId).getGames()).contains(gameId);
+		assertThat(purchaseService.getClientDetails(clientId).getGames()).contains(gameId);
 	}
 
-	private void whenUserAddsAProductToHisBasket(UserId userId, Product product) {
-		purchaseService.addProductToUsersBasket(userId, product);
+	private void whenClientAddsAProductToHisBasket(ClientId clientId, Product product) {
+		purchaseService.addProductToClientsBasket(clientId, product);
 	}
 
 	@Test
 	public void shouldBeAbleToBuyAProductForSomeoneElse() throws ProductAlreadyPurchasedException {
 		GameId gameId = givenAGameInTheCatalog();
-		UserId userId = givenANewUser();
-		UserId otherUserId = givenANewUser();
-		Product product = productFactory.aProduct().forGame(gameId).forUser(otherUserId).inVersion(DIGITAL).create();
+		ClientId clientId = givenANewClient();
+		ClientId otherClientId = givenANewClient();
+		Product product = productFactory.aProduct().forGame(gameId).forClient(otherClientId).inVersion(DIGITAL).create();
 
-		whenUserAddsAProductToHisBasket(userId, product);
-		whenUserGeneratesAndAcceptsTheOffer(userId);
-		whenPaymentIsMade(userId);
+		whenClientAddsAProductToHisBasket(clientId, product);
+		whenClientGeneratesAndAcceptsTheOffer(clientId);
+		whenPaymentIsMade(clientId);
 
-		assertThat(purchaseService.getUserDetails(otherUserId).getGames()).contains(gameId);
-		assertThat(purchaseService.getUserDetails(userId).getGames()).doesNotContain(gameId);
+		assertThat(purchaseService.getClientDetails(otherClientId).getGames()).contains(gameId);
+		assertThat(purchaseService.getClientDetails(clientId).getGames()).doesNotContain(gameId);
 	}
 
 	@Test
 	public void shouldNotBeAbleToGenerateAProductIfItHadBeenAlreadyPurchased() throws ProductAlreadyPurchasedException {
 		GameId gameId = givenAGameInTheCatalog();
-		UserId userId = givenANewUser();
-		Product product = productFactory.aProduct().forGame(gameId).forUser(userId).inVersion(DIGITAL).create();
+		ClientId clientId = givenANewClient();
+		Product product = productFactory.aProduct().forGame(gameId).forClient(clientId).inVersion(DIGITAL).create();
 
-		whenUserAddsAProductToHisBasket(userId, product);
-		whenUserGeneratesAndAcceptsTheOffer(userId);
-		whenPaymentIsMade(userId);
+		whenClientAddsAProductToHisBasket(clientId, product);
+		whenClientGeneratesAndAcceptsTheOffer(clientId);
+		whenPaymentIsMade(clientId);
 
 		assertThatThrownBy(
-				() -> productFactory.aProduct().forGame(gameId).forUser(userId).inVersion(DIGITAL).create()
+				() -> productFactory.aProduct().forGame(gameId).forClient(clientId).inVersion(DIGITAL).create()
 		).isInstanceOf(ProductAlreadyPurchasedException.class);
 	}
 
 	@Test
 	public void shouldSetUpAPaymentWhenPurchaseIsGenerated() throws ProductAlreadyPurchasedException {
 		GameId gameId = givenAGameInTheCatalog();
-		UserId userId = givenANewUser();
-		Product product = productFactory.aProduct().forGame(gameId).forUser(userId).inVersion(DIGITAL).create();
+		ClientId clientId = givenANewClient();
+		Product product = productFactory.aProduct().forGame(gameId).forClient(clientId).inVersion(DIGITAL).create();
 
-		whenUserAddsAProductToHisBasket(userId, product);
-		whenUserGeneratesAndAcceptsTheOffer(userId);
+		whenClientAddsAProductToHisBasket(clientId, product);
+		whenClientGeneratesAndAcceptsTheOffer(clientId);
 
-		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
+		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfClient(clientId));
 		assertThat(paymentService.isPaymentOpen(purchaseDetails.purchaseId())).isTrue();
 	}
 
-	private UserId givenANewUser() {
-		User user = new User();
-		userRepository.save(user);
-		return user.id();
+	private ClientId givenANewClient() {
+		Client client = new Client();
+		clientRepository.save(client);
+		return client.id();
 	}
 
 	private GameId givenAGameInTheCatalog() {
@@ -160,14 +160,14 @@ public class PurchaseAcceptanceTest {
 		return paymentMethod.id();
 	}
 
-	private void whenPaymentIsMade(UserId userId) {
-		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfUser(userId));
+	private void whenPaymentIsMade(ClientId clientId) {
+		PurchaseDetails purchaseDetails = getOnlyElement(purchaseService.getPurchasesOfClient(clientId));
 		paymentService.payFor(purchaseDetails.purchaseId());
 	}
 
-	private void whenUserGeneratesAndAcceptsTheOffer(UserId userId) {
-		offerService.generateOfferFor(userId, deliveryMethodId, paymentMethodId);
-		OfferDetails offerDetails = getOnlyElement(offerService.getOffersFor(userId));
+	private void whenClientGeneratesAndAcceptsTheOffer(ClientId clientId) {
+		offerService.generateOfferFor(clientId, deliveryMethodId, paymentMethodId);
+		OfferDetails offerDetails = getOnlyElement(offerService.getOffersFor(clientId));
 		offerService.acceptOffer(offerDetails.offerId());
 	}
 }

@@ -4,17 +4,17 @@ import com.google.common.collect.ImmutableSet;
 
 import java.util.Set;
 
-public final class UserDetails {
-	private final UserId userId;
+public final class ClientDetails {
+	private final ClientId clientId;
 	private final Set<GameId> games;
 
-	public UserDetails(UserId userId, Set<GameId> games) {
+	public ClientDetails(ClientId clientId, Set<GameId> games) {
 		this.games = ImmutableSet.copyOf(games);
-		this.userId = userId;
+		this.clientId = clientId;
 	}
 
-	public UserId getUserId() {
-		return userId;
+	public ClientId getClientId() {
+		return clientId;
 	}
 
 	public Set<GameId> getGames() {

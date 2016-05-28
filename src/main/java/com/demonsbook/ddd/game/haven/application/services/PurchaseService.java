@@ -1,16 +1,16 @@
 package com.demonsbook.ddd.game.haven.application.services;
 
 import com.demonsbook.ddd.game.haven.domain.building.blocks.DomainEventPublisher;
+import com.demonsbook.ddd.game.haven.domain.entity.Client;
 import com.demonsbook.ddd.game.haven.domain.entity.Purchase;
-import com.demonsbook.ddd.game.haven.domain.entity.PurchaseId;
-import com.demonsbook.ddd.game.haven.domain.entity.User;
 import com.demonsbook.ddd.game.haven.domain.event.PurchaseCompleted;
+import com.demonsbook.ddd.game.haven.domain.repository.ClientRepository;
 import com.demonsbook.ddd.game.haven.domain.repository.PurchaseRepository;
-import com.demonsbook.ddd.game.haven.domain.repository.UserRepository;
+import com.demonsbook.ddd.game.haven.domain.value.object.ClientDetails;
+import com.demonsbook.ddd.game.haven.domain.value.object.ClientId;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseDetails;
-import com.demonsbook.ddd.game.haven.domain.value.object.UserDetails;
-import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
+import com.demonsbook.ddd.game.haven.domain.value.object.PurchaseId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +22,13 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class PurchaseService {
 
-	@Autowired private UserRepository userRepository;
+	@Autowired private ClientRepository clientRepository;
 	@Autowired private PurchaseRepository purchaseRepository;
 	@Autowired private DomainEventPublisher eventPublisher;
 
-	public void addProductToUsersBasket(UserId userId, Product product) {
-		User user = userRepository.getForId(userId);
-		user.addToBasket(product);
+	public void addProductToClientsBasket(ClientId clientId, Product product) {
+		Client client = clientRepository.getForId(clientId);
+		client.addToBasket(product);
 	}
 
 	public void confirmPurchase(PurchaseId purchaseId) {
@@ -37,13 +37,13 @@ public class PurchaseService {
 		eventPublisher.publish(new PurchaseCompleted(purchaseId));
 	}
 
-	public UserDetails getUserDetails(UserId userId) {
-		User user = userRepository.getForId(userId);
-		return user.details();
+	public ClientDetails getClientDetails(ClientId clientId) {
+		Client client = clientRepository.getForId(clientId);
+		return client.details();
 	}
 
-	public Collection<PurchaseDetails> getPurchasesOfUser(UserId userId) {
-		Collection<Purchase> purchases = purchaseRepository.getAllMatching(aPurchaseSearchCriteria().forUser(userId).build());
+	public Collection<PurchaseDetails> getPurchasesOfClient(ClientId clientId) {
+		Collection<Purchase> purchases = purchaseRepository.getAllMatching(aPurchaseSearchCriteria().forClient(clientId).build());
 		return purchases.stream().map(Purchase::getDetails).collect(toList());
 	}
 }

@@ -1,7 +1,7 @@
 package com.demonsbook.ddd.game.haven.infrastructure.storage;
 
-import com.demonsbook.ddd.game.haven.domain.entity.User;
-import com.demonsbook.ddd.game.haven.domain.value.object.UserId;
+import com.demonsbook.ddd.game.haven.domain.entity.Client;
+import com.demonsbook.ddd.game.haven.domain.value.object.ClientId;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
@@ -10,36 +10,36 @@ public class InMemoryRepositoryTest {
 	private TestRepository testRepository = new TestRepository();
 
 	@Test
-	public void shouldStoreMultipleAggregatesUsers() {
-		User user1 = new User();
-		User user2 = new User();
+	public void shouldStoreMultipleAggregatesClients() {
+		Client client1 = new Client();
+		Client client2 = new Client();
 
-		testRepository.save(user1);
-		testRepository.save(user2);
+		testRepository.save(client1);
+		testRepository.save(client2);
 
-		Assertions.assertThat(testRepository.getForId(user1.id())).isSameAs(user1);
-		Assertions.assertThat(testRepository.getForId(user2.id())).isSameAs(user2);
+		Assertions.assertThat(testRepository.getForId(client1.id())).isSameAs(client1);
+		Assertions.assertThat(testRepository.getForId(client2.id())).isSameAs(client2);
 	}
 
 	@Test
 	public void shouldReturnNullForNonExistentAggregated() {
-		User user = new User();
+		Client client = new Client();
 
-		Assertions.assertThat(testRepository.getForId(user.id())).isNull();
+		Assertions.assertThat(testRepository.getForId(client.id())).isNull();
 	}
 
 	@Test
 	public void shouldReturnAllStoredAggregates() {
-		User user1 = new User();
-		User user2 = new User();
+		Client client1 = new Client();
+		Client client2 = new Client();
 
-		testRepository.save(user1);
-		testRepository.save(user2);
+		testRepository.save(client1);
+		testRepository.save(client2);
 
-		Assertions.assertThat(testRepository.getAll()).containsOnly(user1, user2);
+		Assertions.assertThat(testRepository.getAll()).containsOnly(client1, client2);
 	}
 
-	private class TestRepository extends InMemoryRepository<User, UserId> {
+	private class TestRepository extends InMemoryRepository<Client, ClientId> {
 	}
 
 }

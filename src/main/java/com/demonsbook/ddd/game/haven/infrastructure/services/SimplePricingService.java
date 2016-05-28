@@ -1,7 +1,7 @@
 package com.demonsbook.ddd.game.haven.infrastructure.services;
 
-import com.demonsbook.ddd.game.haven.domain.factory.PricingService;
-import com.demonsbook.ddd.game.haven.domain.util.Money;
+import com.demonsbook.ddd.game.haven.domain.services.PricingService;
+import com.demonsbook.ddd.game.haven.domain.value.object.Money;
 import com.demonsbook.ddd.game.haven.domain.value.object.Product;
 import org.springframework.stereotype.Service;
 

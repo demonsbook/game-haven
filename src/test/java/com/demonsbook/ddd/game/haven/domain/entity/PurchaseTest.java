@@ -6,7 +6,7 @@ import org.junit.Test;
 import static com.demonsbook.ddd.game.haven.domain.entity.Purchase.Status.CONFIRMED;
 import static com.demonsbook.ddd.game.haven.domain.entity.Purchase.Status.NEW;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_OFFER;
-import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_USER_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_CLIENT_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PurchaseTest {
@@ -31,8 +31,8 @@ public class PurchaseTest {
 	}
 
 	@Test
-	public void shouldReturnTheIdOfTheUserThatMadeThePurchase() {
-		assertThat(purchase.userId()).isSameAs(DUMMY_USER_ID);
+	public void shouldReturnTheIdOfTheClientThatMadeThePurchase() {
+		assertThat(purchase.clientId()).isSameAs(DUMMY_CLIENT_ID);
 	}
 
 	@Test

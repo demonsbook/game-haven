@@ -19,8 +19,8 @@ class InMemoryOfferRepository extends InMemoryRepository<Offer, OfferId> impleme
 	}
 
 	private Predicate<Offer> criteriaFilterFor(OfferSearchCriteria criteria) {
-		return criteria.getUserId()
-				.map(userId -> (Predicate<Offer>) offer -> offer.userId().equals(userId))
+		return criteria.getClientId()
+				.map(clientId -> (Predicate<Offer>) offer -> offer.clientId().equals(clientId))
 				.orElse(offer -> true);
 	}
 }

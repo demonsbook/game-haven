@@ -7,16 +7,16 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.util.Set;
 
 public final class BasketDetails {
-	private final UserId userId;
+	private final ClientId clientId;
 	private final Set<Product> products;
 
-	public BasketDetails(Set<Product> products, UserId userId) {
+	public BasketDetails(Set<Product> products, ClientId clientId) {
 		this.products = ImmutableSet.copyOf(products);
-		this.userId = userId;
+		this.clientId = clientId;
 	}
 
-	public UserId getUserId() {
-		return userId;
+	public ClientId getClientId() {
+		return clientId;
 	}
 
 	public Set<Product> getProducts() {
@@ -36,7 +36,7 @@ public final class BasketDetails {
 		BasketDetails that = (BasketDetails) other;
 
 		return new EqualsBuilder()
-				.append(userId, that.userId)
+				.append(clientId, that.clientId)
 				.append(products, that.products)
 				.isEquals();
 	}
@@ -44,7 +44,7 @@ public final class BasketDetails {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37)
-				.append(userId)
+				.append(clientId)
 				.append(products)
 				.toHashCode();
 	}

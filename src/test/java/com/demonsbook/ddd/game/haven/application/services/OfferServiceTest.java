@@ -24,7 +24,7 @@ import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_OFFER;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PAYMENT_METHOD_ID;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PRICE;
 import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_PRODUCTS;
-import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_USER_ID;
+import static com.demonsbook.ddd.game.haven.util.TestDummies.DUMMY_CLIENT_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -41,25 +41,25 @@ public class OfferServiceTest {
 	@InjectMocks private OfferService offerService;
 
 	@Test
-	public void shouldGenerateAndStoreAnOfferForUser() {
-		given(offerFactory.createFor(DUMMY_USER_ID, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID)).willReturn(DUMMY_OFFER);
-		offerService.generateOfferFor(DUMMY_USER_ID, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
+	public void shouldGenerateAndStoreAnOfferForClient() {
+		given(offerFactory.createFor(DUMMY_CLIENT_ID, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID)).willReturn(DUMMY_OFFER);
+		offerService.generateOfferFor(DUMMY_CLIENT_ID, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
 
 		then(offerRepository).should().save(DUMMY_OFFER);
 	}
 
 	@Test
-	public void shouldGiveDetailsOfAllOffersForAGivenUser() {
-		given(offerRepository.getAllMatching(anOfferSearchCriteria().forUser(DUMMY_USER_ID).build())).willReturn(ImmutableList.of(DUMMY_OFFER));
+	public void shouldGiveDetailsOfAllOffersForAGivenClient() {
+		given(offerRepository.getAllMatching(anOfferSearchCriteria().forClient(DUMMY_CLIENT_ID).build())).willReturn(ImmutableList.of(DUMMY_OFFER));
 
-		List<OfferDetails> offerDetails = offerService.getOffersFor(DUMMY_USER_ID);
+		List<OfferDetails> offerDetails = offerService.getOffersFor(DUMMY_CLIENT_ID);
 
 		assertThat(offerDetails).containsOnly(DUMMY_OFFER.getDetails());
 	}
 
 	@Test
 	public void shouldAllowAcceptanceOfGeneratedOffer() {
-		Offer offer = new Offer(DUMMY_USER_ID, DUMMY_PRODUCTS, DUMMY_PRICE, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
+		Offer offer = new Offer(DUMMY_CLIENT_ID, DUMMY_PRODUCTS, DUMMY_PRICE, DUMMY_DELIVERY_METHOD_ID, DUMMY_PAYMENT_METHOD_ID);
 		given(offerRepository.getForId(offer.id())).willReturn(offer);
 
 		offerService.acceptOffer(offer.id());

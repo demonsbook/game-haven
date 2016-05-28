@@ -2,18 +2,18 @@ package com.demonsbook.ddd.game.haven.domain.value.object;
 
 public final class Product {
 
-	private final UserId userId;
+	private final ClientId clientId;
 	private final GameId gameId;
 	private final Version version;
 
-	public Product(UserId userId, GameId gameId, Version version) {
-		this.userId = userId;
+	public Product(ClientId clientId, GameId gameId, Version version) {
+		this.clientId = clientId;
 		this.gameId = gameId;
 		this.version = version;
 	}
 
-	public UserId userId() {
-		return userId;
+	public ClientId clientId() {
+		return clientId;
 	}
 
 	public GameId gameId() {
